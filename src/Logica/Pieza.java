@@ -8,6 +8,14 @@ public class Pieza {
     private boolean blancas;
     private TipoPieza tipo;
 
+    public boolean isBlancas() {
+        return blancas;
+    }
+
+    public TipoPieza getTipo() {
+        return tipo;
+    }
+
     public Pieza(int x, int y, boolean blancas, TipoPieza tipoPieza){
         this.x = x;
         this.y = y;

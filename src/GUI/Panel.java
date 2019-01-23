@@ -7,7 +7,6 @@ public class Panel extends JPanel {
     private JButton btnComenzar = new JButton("Comenzar");
     private  Tablero tablero = new Tablero();
     public Panel() {
-
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         add(tablero);
         add(btnComenzar);
@@ -15,7 +14,7 @@ public class Panel extends JPanel {
 
     public void controlador(Controlador controlador) {
         btnComenzar.addActionListener(controlador);
-        btnComenzar.setActionCommand("Comenzar");
+        btnComenzar.setActionCommand("COMENZAR");
         tablero.setControlador(controlador);
     }
 }

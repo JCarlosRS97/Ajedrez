@@ -91,10 +91,14 @@ public class Tablero extends JPanel {
     }
 
     public void moverPieza(int x, int y) {
-        if(x >= 0 && y >= 0){
+        //Comprueba si es una posicion válida y que no es una pieza propia
+        if((x >= 0 && y >= 0 && x < TAM_TABLERO && y < TAM_TABLERO)  &&
+                (tablero[x][y] == null || tablero[x][y].isBlancas() != tablero[xMarcada][yMarcada].isBlancas())){
             tablero[x][y] = tablero[xMarcada][yMarcada];
             tablero[xMarcada][yMarcada] = null;
             repaint();
+        }else{
+            // se puede crear una excepcion si se ve necesario
         }
     }
 

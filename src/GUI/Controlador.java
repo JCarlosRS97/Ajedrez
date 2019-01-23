@@ -20,6 +20,7 @@ public class Controlador implements ActionListener, MouseListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equalsIgnoreCase("Comenzar")){
             System.out.println(Thread.currentThread().getName() + " " + SwingUtilities.isEventDispatchThread());
+
         } else {
             System.err.println("Evento no esperado " + e.getSource().toString());
         }
