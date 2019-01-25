@@ -1,26 +1,34 @@
-package GUI;
+package GUI.Cliente;
+
+import Utils.Tuberia;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 
 public class Controlador implements ActionListener, MouseListener {
-    private Panel panel;
+    private PanelCliente panelCliente;
     private Tablero tablero;
+    private String host = "127.0.0.1";
+    private int port = 9000;
+    private Thread connection;
+    private Tuberia tuberia;
 
-    public Controlador(Panel panel) {
-        this.panel = panel;
+    public Controlador(PanelCliente panelCliente) {
+        this.panelCliente = panelCliente;
+        tuberia = new Tuberia();
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equalsIgnoreCase("Comenzar")){
             System.out.println(Thread.currentThread().getName() + " " + SwingUtilities.isEventDispatchThread());
-
+            /*NetManager netManager = new NetManager(host, port, tuberia);
+            connection = new Thread(netManager);
+            connection.setName("Thread_Red");
+            connection.start();*/
         } else {
             System.err.println("Evento no esperado " + e.getSource().toString());
         }

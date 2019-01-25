@@ -1,4 +1,4 @@
-package GUI;
+package GUI.Cliente;
 
 import Logica.Pieza;
 import Logica.TipoPieza;
