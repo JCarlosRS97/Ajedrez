@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.net.Socket;
 
 public class NetManager extends NetworkClient implements Runnable {
-    private Tuberia tuberia;
+    private Tuberia<Movimiento> tuberia;
     public NetManager(String host, int port, Tuberia tuberia) {
         super(host, port);
         this.tuberia = tuberia;

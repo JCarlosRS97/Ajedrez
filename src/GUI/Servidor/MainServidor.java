@@ -1,29 +1,30 @@
 package GUI.Servidor;
 
-import GUI.Cliente.Controlador;
-import GUI.Cliente.PanelCliente;
+import Server.PlayersManager;
+import Server.ServerNetManager;
 
 import javax.swing.*;
 
-public class Servidor {
+public class MainServidor {
+
     public static void main(String[] args) {
-        final JFrame frame = new JFrame("Ajedrez");
+        final JFrame frame = new JFrame("Servidor");
+        GUIServidor guiServidor = new GUIServidor();
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
                 System.out.println(Thread.currentThread().getName() + " - "
                         + SwingUtilities.isEventDispatchThread());
-                crearGUI(frame);
+                crearGUI(frame, guiServidor.getPanel1());
             }
         });
+        PlayersManager playersManager = new PlayersManager(guiServidor);
+        ServerNetManager serverNetManager = new ServerNetManager(9000, guiServidor, playersManager);
+        serverNetManager.listen();
     }
 
-    private static void crearGUI(JFrame frame){
-        PanelServer panel = new PanelServer();
-       /* Controlador controlador = new Controlador(panel);
-        panel.controlador(controlador);*/
-
-        //frame.setSize(1400, 1400);
+    private static void crearGUI(JFrame frame, JPanel panel){
+        //frame.setSize(700, 700);
         frame.setLocation(200, 200);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setContentPane(panel);

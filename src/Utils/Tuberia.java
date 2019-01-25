@@ -1,12 +1,11 @@
 package Utils;
 
-import Logica.Movimiento;
 
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class Tuberia {
-    private Movimiento movimiento;
+public class Tuberia<T> {
+    private T movimiento;
     private ReentrantLock lock;
     private Condition isFull;
     private Condition isEmpty;
@@ -17,16 +16,16 @@ public class Tuberia {
         isEmpty = lock.newCondition();
     }
 
-    public Movimiento getMovimiento() {
-        Movimiento miMovimiento = new Movimiento(-1, -1);
+    public T getMovimiento() {
+        T miMovimiento = null;
         lock.lock();
         try {
             while (movimiento == null) {
                 isEmpty.await();
             }
-            miMovimiento = new Movimiento(movimiento.getX(), movimiento.getY()); //crea una copia
+            miMovimiento = movimiento;
             movimiento = null;
-            isFull.await();
+            isFull.signalAll();
 
         } catch (InterruptedException e) {
             e.getStackTrace();
@@ -36,14 +35,14 @@ public class Tuberia {
         return miMovimiento;
     }
 
-    public void setMovimiento(Movimiento movimiento) {
+    public void setMovimiento(T nuevoMovimiento) {
         lock.lock();
         try {
             while (movimiento != null) {
                 isFull.await();
             }
-            movimiento = new Movimiento(movimiento);
-            isEmpty.await();
+            movimiento = nuevoMovimiento;
+            isEmpty.signalAll();
 
         } catch (InterruptedException e) {
             e.getStackTrace();
