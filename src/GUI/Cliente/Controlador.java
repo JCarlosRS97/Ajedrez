@@ -1,6 +1,8 @@
 package GUI.Cliente;
 
+import Logica.Movimiento;
 import Utils.Tuberia;
+import cliente.ClienteNetManager;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -19,16 +21,18 @@ public class Controlador implements ActionListener, MouseListener {
     public Controlador(PanelCliente panelCliente) {
         this.panelCliente = panelCliente;
         tuberia = new Tuberia();
+        tablero = panelCliente.getTablero();
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equalsIgnoreCase("Comenzar")){
             System.out.println(Thread.currentThread().getName() + " " + SwingUtilities.isEventDispatchThread());
-            /*NetManager netManager = new NetManager(host, port, tuberia);
+            ClienteNetManager netManager = new ClienteNetManager(host, port, tuberia, panelCliente);
             connection = new Thread(netManager);
             connection.setName("Thread_Red");
-            connection.start();*/
+            connection.start();
+            panelCliente.disableBtnComenzar();
         } else {
             System.err.println("Evento no esperado " + e.getSource().toString());
         }
@@ -49,8 +53,9 @@ public class Controlador implements ActionListener, MouseListener {
     @Override
     public void mouseReleased(MouseEvent e) {
         if(tablero != null){
-            tablero.moverPieza((e.getX())/60,  (tablero.getDimension() - e.getY())/60);
+            Movimiento movimiento = tablero.moverPieza((e.getX())/60,  (tablero.getDimension() - e.getY())/60);
             tablero.setCasillaMarcada(-1,  -1);
+            tuberia.setMovimiento(movimiento);
         }
     }
 
@@ -64,7 +69,4 @@ public class Controlador implements ActionListener, MouseListener {
 
     }
 
-    public void setTablero(Tablero tablero) {
-        this.tablero = tablero;
-    }
 }

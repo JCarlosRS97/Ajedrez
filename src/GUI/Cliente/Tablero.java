@@ -1,5 +1,6 @@
 package GUI.Cliente;
 
+import Logica.Movimiento;
 import Logica.Pieza;
 import Logica.TipoPieza;
 
@@ -10,9 +11,10 @@ public class Tablero extends JPanel {
     public static final int TAM_TABLERO = 8;
     private static int TAM_CASILLA = 60;
     private Pieza[][] tablero;
-    private Controlador controlador = null;
     private int xMarcada = -1;
     private int yMarcada = -1;
+    private boolean miColor;
+
 
     public Tablero(){
         tablero = new Pieza[TAM_TABLERO][TAM_TABLERO];
@@ -21,7 +23,10 @@ public class Tablero extends JPanel {
         setMinimumSize(getPreferredSize());
         setInitialPosicion();
         repaint();
+    }
 
+    public void setColor(boolean miColor) {
+        this.miColor = miColor;
     }
 
     @Override
@@ -52,9 +57,7 @@ public class Tablero extends JPanel {
     }
 
     public void setControlador(Controlador controlador) {
-        this.controlador = controlador;
-        addMouseListener(this.controlador);
-        controlador.setTablero(this);
+        addMouseListener(controlador);
     }
 
     public void setInitialPosicion(){
@@ -90,17 +93,31 @@ public class Tablero extends JPanel {
         }
     }
 
-    public void moverPieza(int x, int y) {
+    public Movimiento moverPieza(int x, int y) {
+        Movimiento movimiento = null;
         //Comprueba si es una posicion válida y que no es una pieza propia
         if((x >= 0 && y >= 0 && x < TAM_TABLERO && y < TAM_TABLERO)  &&
                 (tablero[x][y] == null || tablero[x][y].isBlancas() != tablero[xMarcada][yMarcada].isBlancas())){
+            movimiento = new Movimiento(xMarcada, yMarcada, x, y);
             tablero[x][y] = tablero[xMarcada][yMarcada];
             tablero[xMarcada][yMarcada] = null;
+            repaint();
+        }
+        return movimiento;
+    }
+
+    public void moverPieza(int x, int y, int xDes, int yDes) {
+        //Comprueba si es una posicion válida y que no es una pieza propia
+        if((xDes >= 0 && yDes >= 0 && xDes < TAM_TABLERO && yDes < TAM_TABLERO)  &&
+                (tablero[xDes][yDes] == null || tablero[x][y].isBlancas() != tablero[xDes][yDes].isBlancas())){
+            tablero[xDes][yDes] = tablero[x][y];
+            tablero[x][y] = null;
             repaint();
         }else{
             // se puede crear una excepcion si se ve necesario
         }
     }
+
 
     public int getDimension() {
         return TAM_TABLERO*TAM_CASILLA;

@@ -1,6 +1,7 @@
 package Server;
 
 import GUI.Servidor.GUIServidor;
+import Logica.Comandos;
 import Utils.SocketUtils;
 import Utils.Tuberia;
 
@@ -34,7 +35,7 @@ public class ServerNetManager extends MultiThreadServer{
             Tuberia<String> tuberiaTx = partida.getTuberiaTx(player);
             Tuberia<String> tuberiaRx = partida.getTuberiaRx(player);
             guiServidor.appendText(Thread.currentThread().getName() + ": es " + (player.isBlancas()? "blancas\n" : "negras\n"));
-            out.printf("/SETCOLOR %s", player.isBlancas()? "BLANCAS\n":"NEGRAS\n");
+            out.printf("%s %s", Comandos.SETCOLOR.toString(), player.isBlancas()? "BLANCAS\n":"NEGRAS\n");
             if (player.isBlancas()) {
                 line = in.readLine();
                 tuberiaTx.setMovimiento(line +'\n');

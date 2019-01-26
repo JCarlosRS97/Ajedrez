@@ -1,5 +1,7 @@
 Hace falta diseñar una condicion de fin
 sustituir servidor
 ajustar donde se escribe host y port
-Tuberia<T type>
 esquema productor consumidor si varios jugadores
+bloqueo cuando mueve el otro
+no pintar de azul en vez del color, hacer medio transparente ENCIMA
+es muy ineficiente comandos?
