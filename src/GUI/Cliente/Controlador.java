@@ -28,6 +28,7 @@ public class Controlador implements ActionListener, MouseListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equalsIgnoreCase("Comenzar")){
             System.out.println(Thread.currentThread().getName() + " " + SwingUtilities.isEventDispatchThread());
+            tablero.setControlador(this);
             ClienteNetManager netManager = new ClienteNetManager(host, port, tuberia, panelCliente);
             connection = new Thread(netManager);
             connection.setName("Thread_Red");
@@ -54,8 +55,8 @@ public class Controlador implements ActionListener, MouseListener {
     public void mouseReleased(MouseEvent e) {
         if(tablero != null){
             Movimiento movimiento = tablero.moverPieza((e.getX())/60,  (tablero.getDimension() - e.getY())/60);
-            tablero.setCasillaMarcada(-1,  -1);
-            tuberia.setMovimiento(movimiento);
+            if(movimiento != null)
+                tuberia.setMovimiento(movimiento);
         }
     }
 

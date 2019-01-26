@@ -29,14 +29,14 @@ public class PanelCliente extends JPanel {
         btnComenzar.setEnabled(false);
     }
 
-    public void setColorAndWrite(boolean miColor) {
-        tablero.setColor(miColor);
-        label.setText(label.getText() + (miColor? "blancas" : "negras"));
+    public void setColorAndWrite(boolean color) {
+        tablero.setColor(color);
+        label.setText(label.getText() + (color? "blancas" : "negras"));
     }
 
     public void controlador(Controlador controlador) {
         btnComenzar.addActionListener(controlador);
         btnComenzar.setActionCommand("COMENZAR");
-        tablero.setControlador(controlador);
+        //tablero.setControlador(controlador); Se activa al pulsar el boton comenzar
     }
 }

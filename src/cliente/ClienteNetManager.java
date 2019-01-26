@@ -26,7 +26,6 @@ public class ClienteNetManager extends NetworkClient implements Runnable {
 
     @Override
     protected void handleConnection(Socket client) throws IOException {
-        Movimiento movimiento;
         PrintWriter out = SocketUtils.getWriter(client);
         BufferedReader in = SocketUtils.getReader(client);
         //Recibir color

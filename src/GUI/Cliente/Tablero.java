@@ -8,14 +8,13 @@ import javax.swing.*;
 import java.awt.*;
 
 public class Tablero extends JPanel {
-    public static final int TAM_TABLERO = 8;
+    private static final int TAM_TABLERO = 8;
     private static int TAM_CASILLA = 60;
     private Pieza[][] tablero;
     private int xMarcada = -1;
     private int yMarcada = -1;
-    private boolean miColor;
-
-
+    private boolean color = false;
+    private boolean turno = false;
     public Tablero(){
         tablero = new Pieza[TAM_TABLERO][TAM_TABLERO];
         setPreferredSize(new Dimension(TAM_TABLERO*TAM_CASILLA, TAM_TABLERO*TAM_CASILLA));
@@ -26,7 +25,12 @@ public class Tablero extends JPanel {
     }
 
     public void setColor(boolean miColor) {
-        this.miColor = miColor;
+        this.color = miColor;
+        turno = color;
+    }
+
+    public boolean isBlancas() {
+        return color;
     }
 
     @Override
@@ -36,17 +40,23 @@ public class Tablero extends JPanel {
         for(int i = 0; i < TAM_TABLERO; i++){
             for(int j = 0; j < TAM_TABLERO; j++){ //De la esquina superior izquierda para la derecha y abajo
                 if((i+j)%2 == 0){
-                    if(xMarcada == i && yMarcada == (TAM_TABLERO-j-1)){
+                    /*if(xMarcada == i && yMarcada == (TAM_TABLERO-j-1)){
                         g2d.setColor(Color.CYAN);
                     }else{
                         g2d.setColor(Color.getHSBColor(14, 25, 82));
-                    }
+                    }*/
+                    g2d.setColor(Color.getHSBColor(14, 25, 82));
                 }else{
-                    if(xMarcada == i && yMarcada == (TAM_TABLERO-j-1)){
+                    /*if(xMarcada == i && yMarcada == (TAM_TABLERO-j-1)){
                         g2d.setColor(Color.CYAN);
                     }else{
                         g2d.setColor(Color.getHSBColor(14, 73, 56));
-                    }
+                    }*/
+                    g2d.setColor(Color.getHSBColor(14, 73, 56));
+                }
+                g2d.fillRect(i*60-1, j*60-1, 60, 60);
+                if(xMarcada == i && yMarcada == (TAM_TABLERO-j-1)){
+                    g2d.setColor(new Color(92, 176, 234, 50));
                 }
                 g2d.fillRect(i*60-1, j*60-1, 60, 60);
                 if(tablero[i][TAM_TABLERO-j-1] != null){
@@ -60,7 +70,7 @@ public class Tablero extends JPanel {
         addMouseListener(controlador);
     }
 
-    public void setInitialPosicion(){
+    private void setInitialPosicion(){
         for(int i = 0 ; i < TAM_TABLERO; i++){
             tablero[i][1] = new Pieza(i, 1, true, TipoPieza.Peon);
             tablero[i][6] = new Pieza(i, 1, false, TipoPieza.Peon);
@@ -86,40 +96,46 @@ public class Tablero extends JPanel {
     }
 
     public void setCasillaMarcada(int x, int y) {
+        if(turno && (x >= 0 && y >= 0) && tablero[x][y] != null && (tablero[x][y].isBlancas() == color)){
             xMarcada = x;
             yMarcada = y;
-        if((x >= 0 && y >= 0) && tablero[x][y] != null){
             repaint();
         }
     }
 
     public Movimiento moverPieza(int x, int y) {
+        //Esta funcion es usada a nivel local
         Movimiento movimiento = null;
         //Comprueba si es una posicion válida y que no es una pieza propia
-        if((x >= 0 && y >= 0 && x < TAM_TABLERO && y < TAM_TABLERO)  &&
+        if(turno && (xMarcada>=0 && yMarcada>=0) && (x >= 0 && y >= 0 && x < TAM_TABLERO && y < TAM_TABLERO)  &&
                 (tablero[x][y] == null || tablero[x][y].isBlancas() != tablero[xMarcada][yMarcada].isBlancas())){
             movimiento = new Movimiento(xMarcada, yMarcada, x, y);
             tablero[x][y] = tablero[xMarcada][yMarcada];
             tablero[xMarcada][yMarcada] = null;
-            repaint();
+            turno = !turno;
         }
+        xMarcada = -1;
+        yMarcada = -1;
+        repaint();
         return movimiento;
     }
 
     public void moverPieza(int x, int y, int xDes, int yDes) {
+        //Esta funcion es usada a nivel de red
         //Comprueba si es una posicion válida y que no es una pieza propia
         if((xDes >= 0 && yDes >= 0 && xDes < TAM_TABLERO && yDes < TAM_TABLERO)  &&
                 (tablero[xDes][yDes] == null || tablero[x][y].isBlancas() != tablero[xDes][yDes].isBlancas())){
             tablero[xDes][yDes] = tablero[x][y];
             tablero[x][y] = null;
-            repaint();
-        }else{
-            // se puede crear una excepcion si se ve necesario
+            turno = !turno;
         }
+        xMarcada = -1;
+        yMarcada = -1;
+        repaint();
     }
-
 
     public int getDimension() {
         return TAM_TABLERO*TAM_CASILLA;
     }
+
 }
