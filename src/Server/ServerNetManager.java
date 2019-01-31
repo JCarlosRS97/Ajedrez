@@ -27,27 +27,19 @@ public class ServerNetManager extends MultiThreadServer{
         BufferedReader in = SocketUtils.getReader(connection);
         String line;
         boolean enJuego = true;
-        Player player  = new Player(connection.getInetAddress(), connection.getPort());
+        Player player  = new Player(connection.getInetAddress(), connection.getPort(), out);
         playersManager.addPlayer(player);
         guiServidor.appendText("Se conectó un jugador\n");
         try {
             Partida partida = playersManager.waitForTwoPlayersAndInitialize(player);
-            Tuberia<String> tuberiaTx = partida.getTuberiaTx(player);
-            Tuberia<String> tuberiaRx = partida.getTuberiaRx(player);
-            guiServidor.appendText(Thread.currentThread().getName() + ": es " + (player.isBlancas()? "blancas\n" : "negras\n"));
-            out.printf("%s %s", Comandos.SETCOLOR.toString(), player.isBlancas()? "BLANCAS\n":"NEGRAS\n");
-            if (player.isBlancas()) {
-                line = in.readLine();
-                tuberiaTx.setMovimiento(line +'\n');
-                guiServidor.appendText(Thread.currentThread().getName() + ": in -> " + line +'\n');
-            }
             while(enJuego){//TODO cerrar conexiones cuando acaba la partida
-                line = tuberiaRx.getMovimiento();
-                out.printf(line);
-                guiServidor.appendText(Thread.currentThread().getName() + ": out ->" + line);
                 line = in.readLine();
-                tuberiaTx.setMovimiento(line +'\n');
-                guiServidor.appendText(Thread.currentThread().getName() + ": in -> " + line +'\n');
+                if(line != null){
+                    partida.getWriterOponente(player).println(line);
+                    guiServidor.appendText(Thread.currentThread().getName() + " -> " + line +'\n');
+                }else{
+                    enJuego = false;
+                }
             }
         } catch (BrokenBarrierException | InterruptedException e) {
             playersManager.removePlayer(player);

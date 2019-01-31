@@ -9,6 +9,7 @@ public class PanelCliente extends JPanel {
     private  Tablero tablero = new Tablero();
     private JPanel panel  = new JPanel();
     private JLabel label = new JLabel("Color: ");
+
     public PanelCliente() {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         //Panel de botones y labels
@@ -48,6 +49,6 @@ public class PanelCliente extends JPanel {
         btnComenzar.setActionCommand("COMENZAR");
         btnAbandonar.addActionListener(controlador);
         btnAbandonar.setActionCommand("ABANDONAR");
-        //tablero.setControlador(controlador); Se activa al pulsar el boton comenzar
     }
+
 }

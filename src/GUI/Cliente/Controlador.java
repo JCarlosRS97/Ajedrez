@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.PrintWriter;
 
 public class Controlador implements ActionListener, MouseListener {
     private PanelCliente panelCliente;
@@ -18,6 +19,8 @@ public class Controlador implements ActionListener, MouseListener {
     private int port = 9000;
     private Thread connection;
     private Tuberia<String> tuberia;
+    private PrintWriter out;
+    private ClienteNetManager netManager;
 
     public Controlador(PanelCliente panelCliente) {
         this.panelCliente = panelCliente;
@@ -30,17 +33,23 @@ public class Controlador implements ActionListener, MouseListener {
         if (e.getActionCommand().equalsIgnoreCase("COMENZAR")){
             System.out.println(Thread.currentThread().getName() + " " + SwingUtilities.isEventDispatchThread());
             tablero.setControlador(this);
-            ClienteNetManager netManager = new ClienteNetManager(host, port, tuberia, panelCliente);
+            netManager = new ClienteNetManager(host, port, panelCliente, this);
             connection = new Thread(netManager);
             connection.setName("Thread_Red");
             connection.start();
             panelCliente.setEnableBtnComenzar(false);
         } else if(e.getActionCommand().equalsIgnoreCase("ABANDONAR")){
-            tuberia.setMovimiento(Comandos.GIVE_UP.toString());
+            out.printf("%s\n", Comandos.GIVE_UP);
+            netManager.closeConnection();
+            panelCliente.setEnableBtnAbandonar(false);
             panelCliente.setTextLabel("Has abandonado.");
         } else {
             System.err.println("Evento no esperado " + e.getSource().toString());
         }
+    }
+
+    public void setWriterSocket(PrintWriter writer){
+        out = writer;
     }
 
     @Override
@@ -60,7 +69,7 @@ public class Controlador implements ActionListener, MouseListener {
         if(tablero != null){
             Movimiento movimiento = tablero.moverPieza((e.getX())/60,  (tablero.getDimension() - e.getY())/60);
             if(movimiento != null)
-                tuberia.setMovimiento(Comandos.MOVE.toString() + " " + movimiento);
+                out.printf("%s %s\n", Comandos.MOVE.toString(), movimiento);
         }
     }
 

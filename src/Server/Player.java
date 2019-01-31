@@ -1,15 +1,18 @@
 package Server;
 
+import java.io.PrintWriter;
 import java.net.InetAddress;
 
 public class Player {
     private InetAddress direction;
-    int port;
-    boolean isBlancas;
+    private int port;
+    private boolean isBlancas;
+    private PrintWriter out;
 
-    public Player(InetAddress direction, int port){
+    public Player(InetAddress direction, int port, PrintWriter out){
         this.direction = direction;
         this.port = port;
+        this.out = out;
     }
 
     public Player(){
@@ -35,10 +38,14 @@ public class Player {
 
     @Override
     public boolean equals(Object obj) {
-        Player player2 = (Player) obj;
-        if(player2.getDirection().equals(direction) && player2.getPort() == port){
-            return true;
+        if(obj instanceof Player){
+            Player player2 = (Player) obj;
+            return player2.getDirection().equals(direction) && player2.getPort() == port;
         }
         return false;
+    }
+
+    public PrintWriter getWriter(){
+        return out;
     }
 }

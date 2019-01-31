@@ -1,7 +1,8 @@
 package Server;
 
-import Utils.ExcededPlayers;
 import Utils.Tuberia;
+
+import java.io.PrintWriter;
 
 public class Partida {
     private final Player[] players;
@@ -43,5 +44,10 @@ public class Partida {
 
     public Player getPlayer(int i){
         return players[i];
+    }
+
+    public PrintWriter getWriterOponente(Player player) {
+        if(player == players[0]) return players[1].getWriter();
+        return players[0].getWriter();
     }
 }
