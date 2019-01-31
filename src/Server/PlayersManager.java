@@ -1,6 +1,7 @@
 package Server;
 
 import GUI.Servidor.GUIServidor;
+import Logica.Comandos;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -35,7 +36,7 @@ public class PlayersManager {
         return a;
     }
 
-    public Partida waitForTwoPlayersAndInitialize(Player yo) throws BrokenBarrierException, InterruptedException {
+    public Partida waitForTwoPlayersAndInitialize(Player player) throws BrokenBarrierException, InterruptedException {
         barrier.await();
         //Ya son dos jugadores, se asigna un color
         lock.lock();
@@ -43,15 +44,19 @@ public class PlayersManager {
         //TODO Criterio elegir adversario y repasar concurrencia
         if(partidas.isEmpty() || partidas.get(partidas.size()-1).isFull()){//Esta es la partida anterior que se ha completado
             partida = new Partida();
-            partida.addPlayer(yo);
+            partida.addPlayer(player);
             partidas.add(partida);
         }else{
             partida = partidas.get(partidas.size()-1);
-            partida.addPlayer(yo);
+            partida.addPlayer(player);
             // Se escoge color
             Random random = new Random();
-            yo.setBlancas(random.nextBoolean());
-            partida.getPlayer(0).setBlancas(!yo.isBlancas());
+            player.setBlancas(random.nextBoolean());
+            partida.getPlayer(0).setBlancas(!player.isBlancas());
+            guiServidor.appendText(Thread.currentThread().getName() + ": es " + (player.isBlancas()? "blancas\n" : "negras\n"));
+            player.getWriter().printf("%s %s", Comandos.SETCOLOR, player.isBlancas()? "BLANCAS\n":"NEGRAS\n");
+            guiServidor.appendText(Thread.currentThread().getName() + ": El oponente es " + (!player.isBlancas()? "blancas\n" : "negras\n"));
+            partida.getWriterOponente(player).printf("%s %s", Comandos.SETCOLOR, !player.isBlancas()? "BLANCAS\n":"NEGRAS\n");
             guiServidor.appendText("Comienza la partida " + (partidas.size()-1) + '\n');
         }
         lock.unlock();

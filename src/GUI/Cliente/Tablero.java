@@ -85,7 +85,6 @@ public class Tablero extends JPanel {
         tablero[3][7] = new Pieza(3, 7, false, TipoPieza.Dama);
         tablero[4][7] = new Pieza(4, 7, false, TipoPieza.Rey);
 
-
     }
 
     public void setCasillaMarcada(int x, int y) {
