@@ -13,11 +13,11 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 public class ClienteNetManager extends NetworkClient implements Runnable {
-    private Tuberia<Movimiento> tuberia;
+    private Tuberia<String> tuberia;
     private Tablero tablero;
     private PanelCliente panelCliente;
 
-    public ClienteNetManager(String host, int port, Tuberia<Movimiento> tuberia, PanelCliente panelCliente) {
+    public ClienteNetManager(String host, int port, Tuberia<String> tuberia, PanelCliente panelCliente) {
         super(host, port);
         this.tuberia = tuberia;
         this.panelCliente = panelCliente;
@@ -28,6 +28,7 @@ public class ClienteNetManager extends NetworkClient implements Runnable {
     protected void handleConnection(Socket client) throws IOException {
         PrintWriter out = SocketUtils.getWriter(client);
         BufferedReader in = SocketUtils.getReader(client);
+        boolean continuar = true;
         //Recibir color
         boolean isBlancas = false;
         String line = in.readLine();
@@ -38,18 +39,27 @@ public class ClienteNetManager extends NetworkClient implements Runnable {
         }
 
         if(isBlancas){
-            out.printf("%s %s\n", Comandos.MOVE.toString(), tuberia.getMovimiento());
+            out.printf("%s\n", tuberia.getMovimiento());
         }
 
-        while(true){
+        while(continuar){
             line = in.readLine();
             params = line.split(" ");
             if(params[0].equalsIgnoreCase(Comandos.MOVE.toString())){
                 tablero.moverPieza(Integer.parseInt(params[1]), Integer.parseInt(params[2]),
                         Integer.parseInt(params[3]), Integer.parseInt(params[4]));
+                line = tuberia.getMovimiento();
+                if(line.equalsIgnoreCase(Comandos.GIVE_UP.toString())){
+                    continuar = false;
+                    panelCliente.setEnableBtnAbandonar(false);
+                }
+                out.printf("%s\n", line);
+            }else if(params[0].equalsIgnoreCase(Comandos.GIVE_UP.toString())){
+                continuar = false;
+                panelCliente.setTextLabel("Has ganado!");
             }
-            out.printf("%s %s\n", Comandos.MOVE.toString(), tuberia.getMovimiento());
         }
+        client.close();
     }
 
     @Override
