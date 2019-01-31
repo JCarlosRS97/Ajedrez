@@ -54,9 +54,9 @@ public class PlayersManager {
             player.setBlancas(random.nextBoolean());
             partida.getPlayer(0).setBlancas(!player.isBlancas());
             guiServidor.appendText(Thread.currentThread().getName() + ": es " + (player.isBlancas()? "blancas\n" : "negras\n"));
-            player.getWriter().printf("%s %s", Comandos.SETCOLOR, player.isBlancas()? "BLANCAS\n":"NEGRAS\n");
+            player.getWriter().printf("%s %s", Comandos.SET_COLOR, player.isBlancas()? "BLANCAS\n":"NEGRAS\n");
             guiServidor.appendText(Thread.currentThread().getName() + ": El oponente es " + (!player.isBlancas()? "blancas\n" : "negras\n"));
-            partida.getWriterOponente(player).printf("%s %s", Comandos.SETCOLOR, !player.isBlancas()? "BLANCAS\n":"NEGRAS\n");
+            partida.getWriterOponente(player).printf("%s %s", Comandos.SET_COLOR, !player.isBlancas()? "BLANCAS\n":"NEGRAS\n");
             guiServidor.appendText("Comienza la partida " + (partidas.size()-1) + '\n');
         }
         lock.unlock();

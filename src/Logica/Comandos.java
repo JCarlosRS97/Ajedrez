@@ -1,4 +1,4 @@
 package Logica;
 
-public enum Comandos { SETCOLOR, MOVE, GIVE_UP
+public enum Comandos { SET_COLOR, MOVE, GIVE_UP
 }

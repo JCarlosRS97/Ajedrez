@@ -1,9 +1,7 @@
 package Server;
 
 import GUI.Servidor.GUIServidor;
-import Logica.Comandos;
 import Utils.SocketUtils;
-import Utils.Tuberia;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -32,13 +30,14 @@ public class ServerNetManager extends MultiThreadServer{
         guiServidor.appendText("Se conectó un jugador\n");
         try {
             Partida partida = playersManager.waitForTwoPlayersAndInitialize(player);
-            while(enJuego){//TODO cerrar conexiones cuando acaba la partida
+            while(enJuego){
                 line = in.readLine();
                 if(line != null){
                     partida.getWriterOponente(player).println(line);
                     guiServidor.appendText(Thread.currentThread().getName() + " -> " + line +'\n');
                 }else{
                     enJuego = false;
+                    partida.getWriterOponente(player).println((String)null); // indica el fin de conexion
                 }
             }
         } catch (BrokenBarrierException | InterruptedException e) {
@@ -46,6 +45,8 @@ public class ServerNetManager extends MultiThreadServer{
             guiServidor.appendText("No se ha podido empezar la partida");
         }
         playersManager.removePlayer(player);
+        guiServidor.appendText(Thread.currentThread().getName() + ": Fin de la conexion.\n");
+        System.out.println("Fin de la conexión");
         connection.close();
     }
 }

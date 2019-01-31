@@ -17,6 +17,7 @@ public class PanelCliente extends JPanel {
         panel.add(btnComenzar);
         panel.add(new JSeparator(JSeparator.HORIZONTAL));
         panel.add(btnAbandonar);
+        btnAbandonar.setEnabled(false);
         panel.add(new JSeparator(JSeparator.HORIZONTAL));
         panel.add(label);
 

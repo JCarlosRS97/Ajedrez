@@ -1,5 +1,4 @@
-ajustar donde se escribe host y port. Crear netManager en main?
-dialog reiniciar
+
 nick y seleccionar partida
 elo,cargar jugadores
 reloj(opcional)

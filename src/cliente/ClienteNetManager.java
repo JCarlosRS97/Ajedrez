@@ -36,15 +36,17 @@ public class ClienteNetManager extends NetworkClient implements Runnable {
         while(continuar){
             line = in.readLine();
             params = line.split(" ");
-            if(params[0].equalsIgnoreCase(Comandos.SETCOLOR.toString())){
+            if(params[0].equalsIgnoreCase(Comandos.SET_COLOR.toString())){
                 boolean isBlancas = params[1].equalsIgnoreCase("BLANCAS");
                 panelCliente.setColorAndWrite(isBlancas);
+                panelCliente.setEnableBtnAbandonar(true);
             }else if(params[0].equalsIgnoreCase(Comandos.MOVE.toString())){
                 tablero.moverPieza(Integer.parseInt(params[1]), Integer.parseInt(params[2]),
                         Integer.parseInt(params[3]), Integer.parseInt(params[4]));
             }else if(params[0].equalsIgnoreCase(Comandos.GIVE_UP.toString())){
                 continuar = false;
                 panelCliente.setEnableBtnAbandonar(false);
+                tablero.removeMouseListener(controlador);// TODO evitar que se pueda mover tras abandonar
                 panelCliente.setTextLabel("Has ganado!");
             }
         }
