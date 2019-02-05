@@ -17,14 +17,15 @@ public class ClienteModificado {
 
     private static void crearGUI(JFrame frame){
         PanelCliente panelCliente = new PanelCliente();
-        Controlador controlador = new Controlador(panelCliente);
-        panelCliente.controlador(controlador);
         BaseGUI baseGUI = new BaseGUI(panelCliente);
+        Controlador controlador = new Controlador(panelCliente, baseGUI);
+        panelCliente.controlador(controlador);
+        baseGUI.controlador(controlador);
 
         //frame.setSize(700, 700);
         frame.setLocation(200, 200);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        frame.setContentPane(baseGUI.getPanel1());
+        frame.setContentPane(baseGUI.getPanel());
         frame.pack();
         frame.setVisible(true);
     }

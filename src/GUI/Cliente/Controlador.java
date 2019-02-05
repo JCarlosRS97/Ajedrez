@@ -12,26 +12,34 @@ import java.io.PrintWriter;
 
 public class Controlador implements ActionListener, MouseListener {
     private PanelCliente panelCliente;
+    private BaseGUI baseGUI;
     private Tablero tablero;
     private String host = "127.0.0.1";
     private int port = 9000;
     private PrintWriter out;
     private ClienteNetManager netManager;
+    private String user;
 
-    public Controlador(PanelCliente panelCliente) {
+    public Controlador(PanelCliente panelCliente, BaseGUI baseGUI) {
         this.panelCliente = panelCliente;
         tablero = panelCliente.getTablero();
+        this.baseGUI = baseGUI;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getActionCommand().equalsIgnoreCase("COMENZAR")){
-            tablero.setControlador(this);
-            netManager = new ClienteNetManager(host, port, panelCliente, this);
+        if (e.getActionCommand().equalsIgnoreCase("CONECTAR")) {
+            user = baseGUI.getUser();
+            baseGUI.setEnableBtnConectar(false);
+            baseGUI.setEnableTxtUser(false);
+            netManager = new ClienteNetManager(host, port, panelCliente, baseGUI, this);
             Thread connection = new Thread(netManager);
             connection.setName("Thread_Red");
             connection.start();
-            panelCliente.setEnableBtnComenzar(false);
+        }else if(e.getActionCommand().equalsIgnoreCase("RETAR")){
+            String s = baseGUI.getSelectedItem();
+            if(s != null)
+                out.println(Comandos.MATCH + " " + baseGUI.getSelectedItem());
         } else if(e.getActionCommand().equalsIgnoreCase("ABANDONAR")){
             out.println(Comandos.GIVE_UP);
             netManager.closeConnection();
@@ -76,6 +84,10 @@ public class Controlador implements ActionListener, MouseListener {
     @Override
     public void mouseExited(MouseEvent e) {
 
+    }
+
+    public String getUser() {
+        return user;
     }
 
 }

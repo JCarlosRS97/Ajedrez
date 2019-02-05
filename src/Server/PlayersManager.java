@@ -3,28 +3,24 @@ package Server;
 import GUI.Servidor.GUIServidor;
 import Logica.Comandos;
 
-import java.util.ArrayList;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.stream.Collectors;
 
 public class PlayersManager {
     private ReentrantLock lock;
-    private Condition isNotEnought;
     int numJugadores = 0;
-    private CyclicBarrier barrier;
-    private ArrayList<Player> players;
+    private Set<Player> players;
     private ArrayList<Partida> partidas;
     private GUIServidor guiServidor;
 
     public PlayersManager(GUIServidor guiServidor) {
         this.guiServidor = guiServidor;
         lock = new ReentrantLock();
-        isNotEnought = lock.newCondition();
-        barrier = new CyclicBarrier(2);
-        players = new ArrayList<>();
+        players = new HashSet<>();
         partidas = new ArrayList<>();
     }
 
@@ -36,41 +32,58 @@ public class PlayersManager {
         return a;
     }
 
-    public Partida waitForTwoPlayersAndInitialize(Player player) throws BrokenBarrierException, InterruptedException {
-        barrier.await();
-        //Ya son dos jugadores, se asigna un color
+    public void initializeMatch(Partida partida) {
+        //TODO comprobar si es necesaria el control de concurrencia
         lock.lock();
-        Partida partida;
-        //TODO Criterio elegir adversario y repasar concurrencia
-        if(partidas.isEmpty() || partidas.get(partidas.size()-1).isFull()){//Esta es la partida anterior que se ha completado
-            partida = new Partida();
-            partida.addPlayer(player);
-            partidas.add(partida);
-        }else{
-            partida = partidas.get(partidas.size()-1);
-            partida.addPlayer(player);
-            // Se escoge color
-            Random random = new Random();
-            player.setBlancas(random.nextBoolean());
-            partida.getPlayer(0).setBlancas(!player.isBlancas());
-            guiServidor.appendText(Thread.currentThread().getName() + ": es " + (player.isBlancas()? "blancas\n" : "negras\n"));
-            player.getWriter().printf("%s %s", Comandos.SET_COLOR, player.isBlancas()? "BLANCAS\n":"NEGRAS\n");
-            guiServidor.appendText(Thread.currentThread().getName() + ": El oponente es " + (!player.isBlancas()? "blancas\n" : "negras\n"));
-            partida.getWriterOponente(player).printf("%s %s", Comandos.SET_COLOR, !player.isBlancas()? "BLANCAS\n":"NEGRAS\n");
-            guiServidor.appendText("Comienza la partida " + (partidas.size()-1) + '\n');
-        }
+        partidas.add(partida);
+        Player p1 = partida.getPlayer(0);
+        Player p2 = partida.getPlayer(1);
+        // Se escoge color
+        Random random = new Random();
+        p1.setBlancas(random.nextBoolean());
+        partida.getPlayer(0).setBlancas(!p1.isBlancas());
+        guiServidor.appendText(String.format("%s: %s es %s", Thread.currentThread().getName(),
+                p1.getUser(), p1.isBlancas() ? "blancas\n" : "negras\n"));
+
+        p1.sendln(Comandos.SET_COLOR + " " + (p1.isBlancas()? "BLANCAS":"NEGRAS"));
+        guiServidor.appendText(String.format("%s: %s es %s", Thread.currentThread().getName(), p2.getUser(), !p1.isBlancas() ? "blancas\n" : "negras\n"));
+        p2.sendln(Comandos.SET_COLOR + " " + (!p1.isBlancas()? "BLANCAS":"NEGRAS"));
+        guiServidor.appendText("Comienza la partida " + (partidas.size()-1) + '\n');
         lock.unlock();
-        return partida;
     }
 
-    public void addPlayer(Player player) {
+    public boolean addPlayer(Player player) {
         lock.lock();
-        players.add(player);
+        boolean ok = players.add(player);
         lock.unlock();
+        return ok;
     }
     public void removePlayer(Player player){
         lock.lock();
         players.removeIf(e -> e.equals(player));
         lock.unlock();
+    }
+
+    public String getMyPlayers(Player player){
+        return players.stream().filter(e -> !e.isPlaying() && !e.equals(player)).map(Player::getUser).collect(Collectors.joining(","));
+    }
+
+    public void sendlnBroadcast(String s){
+        players.stream().forEach(e -> e.sendln(s));
+    }
+
+    public boolean sendlnToPlayer(String user, String msg){
+        Optional<Player> search = players.stream().filter(e -> e.getUser().equalsIgnoreCase(user)).findAny();
+        if(search.isPresent()){
+            search.get().sendln(msg);
+            return true;
+        }
+        return false;
+    }
+
+    public Player getPlayer(String user){
+        Optional<Player> search = players.stream().filter(e -> e.getUser().equalsIgnoreCase(user)).findAny();
+        return search.orElse(null);
+
     }
 }

@@ -1,36 +1,22 @@
 package Server;
 
-import Utils.Tuberia;
-
-import java.io.PrintWriter;
-
 public class Partida {
     private final Player[] players;
-    private Tuberia<String> tuberia01, tuberia10;
 
     public Partida(){
         players = new Player[2];
-        tuberia01 = new Tuberia<>();
-        tuberia10 = new Tuberia<>();
     }
 
-    public Tuberia getTuberiaTx(Player player){
-        if(player == players[0]){
-            return tuberia01;
-        }
-        return tuberia10;
-    }
-
-    public Tuberia getTuberiaRx(Player player){
-        if(player == players[0]){
-            return tuberia10;
-        }
-        return tuberia01;
+    public Partida(Player p1, Player p2){
+        players = new Player[2];
+        players[0] = p1;
+        players[1] = p2;
     }
 
     public boolean isFull(){
         return players[1] != null;
     }
+
     public void addPlayer(Player player) {
 /*        if(isFull()){
             throw new ExcededPlayers();
@@ -46,8 +32,8 @@ public class Partida {
         return players[i];
     }
 
-    public PrintWriter getWriterOponente(Player player) {
-        if(player == players[0]) return players[1].getWriter();
-        return players[0].getWriter();
+    public Player getOponente(Player player) {
+        if(player == players[0]) return players[1];
+        return players[0];
     }
 }

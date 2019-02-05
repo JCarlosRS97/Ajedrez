@@ -2,3 +2,7 @@
 nick y seleccionar partida
 elo,cargar jugadores
 reloj(opcional)
+controlar fallo de conexion
+ajustar writer a null si conexcion erronea
+usuarios con comas es un problema
+ajustar desconexion

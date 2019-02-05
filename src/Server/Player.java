@@ -2,23 +2,29 @@ package Server;
 
 import java.io.PrintWriter;
 import java.net.InetAddress;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class Player {
     private InetAddress direction;
     private int port;
     private boolean isBlancas;
     private PrintWriter out;
+    private String user;
+    private boolean playing;
+    private Partida partida = null;
 
-    public Player(InetAddress direction, int port, PrintWriter out){
+    public String getUser() {
+        return user;
+    }
+
+    public Player(String user, InetAddress direction, int port, PrintWriter out){
+        this.user = user;
         this.direction = direction;
         this.port = port;
         this.out = out;
+        playing = false;
     }
 
-    public Player(){
-        port = -1;
-        direction = null;
-    }
 
     public InetAddress getDirection() {
         return direction;
@@ -40,12 +46,29 @@ public class Player {
     public boolean equals(Object obj) {
         if(obj instanceof Player){
             Player player2 = (Player) obj;
-            return player2.getDirection().equals(direction) && player2.getPort() == port;
+            return player2.getDirection().equals(direction) && player2.getPort() == port
+                    && player2.getUser().equals(user);
         }
         return false;
     }
 
-    public PrintWriter getWriter(){
-        return out;
+    public synchronized void sendln(String s){
+        out.println(s);
+    }
+
+    public boolean isPlaying() {
+        return playing;
+    }
+
+    public void setPlaying(boolean playing) {
+        this.playing = playing;
+    }
+
+    public Partida getPartida() {
+        return partida;
+    }
+
+    public void setPartida(Partida partida) {
+        this.partida = partida;
     }
 }
