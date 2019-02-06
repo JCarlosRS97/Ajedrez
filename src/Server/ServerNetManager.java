@@ -28,7 +28,8 @@ public class ServerNetManager extends MultiThreadServer{
         String[] params;
         boolean conectado = true;
         Player player = null;
-        Partida partida = null;
+        Player oponente;
+        Partida partida;
         guiServidor.appendText("Se intenta conectar un jugador\n");
 
         try {
@@ -70,7 +71,7 @@ public class ServerNetManager extends MultiThreadServer{
                             }
                             break;
                         case MATCH_ACK:
-                            Player oponente = playersManager.getPlayer(params[1]);
+                            oponente = playersManager.getPlayer(params[1]);
                             if(player != null && oponente!= null && !oponente.isPlaying()){
                                 player.setPlaying(true);
                                 oponente.setPlaying(true);
@@ -83,16 +84,39 @@ public class ServerNetManager extends MultiThreadServer{
                             }
                             break;
                         case MOVE:
-                            if(player.isPlaying()){
+                            if(player != null && player.isPlaying()){
                                 partida = player.getPartida();
                                 if(partida != null){
                                     partida.getOponente(player).sendln(line);
                                 }else{
                                     guiServidor.appendText("Se ha producido un error en la partida.\n");
                                 }
+                            }else{
+                                guiServidor.appendText("Se ha producido un error en la partida.\n");
                             }
                             break;
-
+                        case GIVE_UP:
+                            if(player != null && player.isPlaying()){
+                                partida = player.getPartida();
+                                if(partida != null){
+                                    guiServidor.appendText(player.getUser() + " se ha rendido.\n");
+                                    oponente = partida.getOponente(player);
+                                    oponente.sendln(line);
+                                    //Se gestiona la reintroduccion en la lista de los jugadores
+                                    oponente.setPlaying(false);
+                                    player.setPlaying(false);
+                                    oponente.setPartida(null);
+                                    player.setPartida(null);
+                                    playersManager.removerPartida(partida);
+                                    playersManager.sendlnBroadcast(Comandos.ADD_USERS + " " + player.getUser() +
+                                            "," + oponente.getUser());
+                                }else{
+                                    guiServidor.appendText("Se ha producido un error en la partida.\n");
+                                }
+                            }else{
+                                guiServidor.appendText("Se ha producido un error en la partida.\n");
+                            }
+                            break;
                     }
 
                 }

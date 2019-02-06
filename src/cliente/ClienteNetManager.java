@@ -42,20 +42,22 @@ public class ClienteNetManager extends NetworkClient implements Runnable {
                 switch (Comandos.valueOf(params[0])){
                     case SET_COLOR:
                         tablero.setControlador(controlador);
+                        tablero.restart();
                         baseGUI.changePanel(BaseGUI.PARTIDA);
                         boolean isBlancas = params[1].equalsIgnoreCase("BLANCAS");
                         panelCliente.setColorAndWrite(isBlancas);
                         panelCliente.setEnableBtnAbandonar(true);
+                        panelCliente.setEnableBtnVolver(false);
                         break;
                     case MOVE:
                         tablero.moverPieza(Integer.parseInt(params[1]), Integer.parseInt(params[2]),
                                 Integer.parseInt(params[3]), Integer.parseInt(params[4]));
                         break;
                     case GIVE_UP:
-                        conectado = false;
                         panelCliente.setEnableBtnAbandonar(false);
-                        tablero.removeMouseListener(controlador);// TODO evitar que se pueda mover tras abandonar
-                        panelCliente.setTextLabel("Has ganado!");
+                        tablero.removeMouseListener(controlador);
+                        baseGUI.showWinnerDialog();
+                        panelCliente.setEnableBtnVolver(true);
                         break;
                     case CONNECT:
                         if(!params[1].equalsIgnoreCase("ACK")){
@@ -79,11 +81,7 @@ public class ClienteNetManager extends NetworkClient implements Runnable {
                         break;
                     case MATCH:
                         //Se recibe un reto
-                        int n = baseGUI.askForMatch(params[1]);
-                        if(n == 0){
-                            //Ha sido aceptado
-                            out.println(Comandos.MATCH_ACK + " " + params[1]);
-                        }
+                        baseGUI.askForMatch(params[1]); // Se le pasa el usuario retador
                         break;
                 }
             }else{

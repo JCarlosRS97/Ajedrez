@@ -1,5 +1,3 @@
-
-nick y seleccionar partida
 elo,cargar jugadores
 reloj(opcional)
 controlar fallo de conexion

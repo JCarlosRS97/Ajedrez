@@ -4,9 +4,6 @@ import GUI.Servidor.GUIServidor;
 import Logica.Comandos;
 
 import java.util.*;
-import java.util.concurrent.BrokenBarrierException;
-import java.util.concurrent.CyclicBarrier;
-import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
 
@@ -41,13 +38,16 @@ public class PlayersManager {
         // Se escoge color
         Random random = new Random();
         p1.setBlancas(random.nextBoolean());
-        partida.getPlayer(0).setBlancas(!p1.isBlancas());
-        guiServidor.appendText(String.format("%s: %s es %s", Thread.currentThread().getName(),
-                p1.getUser(), p1.isBlancas() ? "blancas\n" : "negras\n"));
+        p2.setBlancas(!p1.isBlancas());
 
-        p1.sendln(Comandos.SET_COLOR + " " + (p1.isBlancas()? "BLANCAS":"NEGRAS"));
-        guiServidor.appendText(String.format("%s: %s es %s", Thread.currentThread().getName(), p2.getUser(), !p1.isBlancas() ? "blancas\n" : "negras\n"));
-        p2.sendln(Comandos.SET_COLOR + " " + (!p1.isBlancas()? "BLANCAS":"NEGRAS"));
+        guiServidor.appendText(new StringBuilder(Thread.currentThread().getName()).append(": ")
+                .append(p1.getUser()).append(" es ").append(p1.isBlancas() ? "blancas\n" : "negras\n").toString());
+        p1.sendln(Comandos.SET_COLOR + " " + (p1.isBlancas()? "BLANCAS":"NEGRAS") + " " + p1.getUser());
+
+        guiServidor.appendText(new StringBuilder(Thread.currentThread().getName()).append(": ").append(p2.getUser())
+                .append(" es ").append(!p1.isBlancas() ? "blancas\n" : "negras\n").toString());
+        p2.sendln(Comandos.SET_COLOR + " " + (!p1.isBlancas()? "BLANCAS":"NEGRAS") + p2.getUser() + p2.getUser());
+
         guiServidor.appendText("Comienza la partida " + (partidas.size()-1) + '\n');
         lock.unlock();
     }
@@ -85,5 +85,9 @@ public class PlayersManager {
         Optional<Player> search = players.stream().filter(e -> e.getUser().equalsIgnoreCase(user)).findAny();
         return search.orElse(null);
 
+    }
+
+    public void removerPartida(Partida partida){
+        partidas.remove(partida);
     }
 }

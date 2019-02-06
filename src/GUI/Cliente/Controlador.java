@@ -14,16 +14,18 @@ public class Controlador implements ActionListener, MouseListener {
     private PanelCliente panelCliente;
     private BaseGUI baseGUI;
     private Tablero tablero;
-    private String host = "127.0.0.1";
-    private int port = 9000;
+    private String host;
+    private int port;
     private PrintWriter out;
     private ClienteNetManager netManager;
     private String user;
 
-    public Controlador(PanelCliente panelCliente, BaseGUI baseGUI) {
+    public Controlador(PanelCliente panelCliente, BaseGUI baseGUI, String host, int port) {
         this.panelCliente = panelCliente;
         tablero = panelCliente.getTablero();
         this.baseGUI = baseGUI;
+        this.host = host;
+        this.port = port;
     }
 
     @Override
@@ -42,10 +44,12 @@ public class Controlador implements ActionListener, MouseListener {
                 out.println(Comandos.MATCH + " " + baseGUI.getSelectedItem());
         } else if(e.getActionCommand().equalsIgnoreCase("ABANDONAR")){
             out.println(Comandos.GIVE_UP);
-            netManager.closeConnection();
             panelCliente.setEnableBtnAbandonar(false);
-            panelCliente.setTextLabel("Has abandonado.");
+            panelCliente.setEnableBtnVolver(true);
+            baseGUI.showLooserDialog();
             tablero.removeMouseListener(this);
+        }else if(e.getActionCommand().equalsIgnoreCase("VOLVER")){
+            baseGUI.changePanel(BaseGUI.HOME);
         } else {
             System.err.println("Evento no esperado " + e.getSource().toString());
         }
@@ -88,6 +92,10 @@ public class Controlador implements ActionListener, MouseListener {
 
     public String getUser() {
         return user;
+    }
+
+    public void sendln(String s){
+        out.println(s);
     }
 
 }

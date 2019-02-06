@@ -18,7 +18,7 @@ public class ClienteModificado {
     private static void crearGUI(JFrame frame){
         PanelCliente panelCliente = new PanelCliente();
         BaseGUI baseGUI = new BaseGUI(panelCliente);
-        Controlador controlador = new Controlador(panelCliente, baseGUI);
+        Controlador controlador = new Controlador(panelCliente, baseGUI, "127.0.0.1", 9000);
         panelCliente.controlador(controlador);
         baseGUI.controlador(controlador);
 

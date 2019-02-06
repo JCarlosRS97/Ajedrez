@@ -2,6 +2,9 @@ package GUI.Cliente;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class BaseGUI {
     private JPanel panel;
@@ -14,6 +17,8 @@ public class BaseGUI {
     private JLabel lblError;
     private String user = null;
     private DefaultListModel<String> model;
+    private Queue<RematchDialog> dialogs; //Acumula los dialogs de retos
+    private Controlador controlador;
 
     public static final String HOME = "Home";
     public static final String PARTIDA = "Partida";
@@ -24,6 +29,7 @@ public class BaseGUI {
         partida.add(panelCliente);
         model = new DefaultListModel<>();
         list.setModel(model);
+        dialogs = new LinkedList<>();
 
 
     }
@@ -33,6 +39,7 @@ public class BaseGUI {
     }
 
     public void controlador(Controlador controlador) {
+        this.controlador = controlador;
         btnConectar.setActionCommand("CONECTAR");
         btnRetar.setActionCommand("RETAR");
         btnRetar.addActionListener(controlador);
@@ -64,36 +71,48 @@ public class BaseGUI {
     }
 
     public void setTextErrorVisible(boolean visible){
-        lblError.setVisible(false);
+        lblError.setVisible(visible);
     }
 
     public void addList(String[] users) {
-        for(int i = 0; i < users.length; i++){
-            if(!user.equals(users[i]))
-                model.addElement(users[i]);
+        for (String user1 : users) {
+            if (!user.equals(user1))
+                model.addElement(user1);
         }
     }
 
     public void deleteUserList(String[] users) {
-        for(int i = 0; i < users.length; i++){
-            model.removeElement(users[i]);
+        for (String user1 : users) {
+            model.removeElement(user1);
         }
     }
 
 
-    public int askForMatch(String retador) {
-        return JOptionPane.showOptionDialog(panel,
-                "Te ha retado " + retador,
-                "Reto",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.QUESTION_MESSAGE,
-                null,     //do not use a custom Icon
-                opciones,  //the titles of buttons
-                opciones[0]);
+    public void askForMatch(String retador) {
+        RematchDialog dialog = new RematchDialog( retador, controlador);
+        dialogs.add(dialog);
+        dialog.pack();
+        dialog.setLocationRelativeTo(panel);
+        dialog.setVisible(true);
     }
 
     public void changePanel(String card){
+        //Primero se deben eliminar los dialogs
+        RematchDialog dialog = dialogs.poll();
+        while(dialog!= null){
+            dialog.dispose();
+            dialog = dialogs.poll();
+        }
         CardLayout c1 = (CardLayout) panel.getLayout();
         c1.show(panel, card);
     }
+
+    public void showWinnerDialog() {
+        JOptionPane.showMessageDialog(panel, "Has ganado!", "Fin de partida", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    public void showLooserDialog() {
+        JOptionPane.showMessageDialog(panel, "Has perdido.", "Fin de partida", JOptionPane.INFORMATION_MESSAGE);
+    }
+
 }

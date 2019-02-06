@@ -12,17 +12,23 @@ public class Player {
     private String user;
     private boolean playing;
     private Partida partida = null;
+    private int puntuacion;
 
     public String getUser() {
         return user;
     }
 
-    public Player(String user, InetAddress direction, int port, PrintWriter out){
+    public Player(String user, InetAddress direction, int port, PrintWriter out, int puntuacion){
         this.user = user;
         this.direction = direction;
         this.port = port;
         this.out = out;
         playing = false;
+        this.puntuacion = puntuacion;
+    }
+
+    public Player(String user, InetAddress direction, int port, PrintWriter out){
+        this(user, direction, port, out, 1500);
     }
 
 

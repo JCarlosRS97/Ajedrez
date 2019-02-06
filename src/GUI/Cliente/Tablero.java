@@ -6,6 +6,7 @@ import Logica.TipoPieza;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Arrays;
 
 public class Tablero extends JPanel {
     private static final int TAM_TABLERO = 8;
@@ -20,8 +21,6 @@ public class Tablero extends JPanel {
         setPreferredSize(new Dimension(TAM_TABLERO*TAM_CASILLA, TAM_TABLERO*TAM_CASILLA));
         setMaximumSize(getPreferredSize());
         setMinimumSize(getPreferredSize());
-        setInitialPosicion();
-        repaint();
     }
 
     public void setColor(boolean miColor) {
@@ -48,7 +47,7 @@ public class Tablero extends JPanel {
                 g2d.fillRect(i*60-1, j*60-1, 60, 60);
                 //Si hay una casilla señalada
                 if(xMarcada == i && yMarcada == (TAM_TABLERO-j-1)){
-                    g2d.setColor(new Color(92, 176, 234, 50));
+                    g2d.setColor(new Color(92, 176, 234, 60));
                 }
                 g2d.fillRect(i*60-1, j*60-1, 60, 60);
                 //Se dibuja la pieza en la casilla(en su caso)
@@ -128,6 +127,17 @@ public class Tablero extends JPanel {
 
     public int getDimension() {
         return TAM_TABLERO*TAM_CASILLA;
+    }
+
+    public void restart(){
+        turno = false;
+        for (int i = 0; i < TAM_TABLERO; i++){
+            for(int j = 0; j < TAM_TABLERO; j++){
+                tablero[i][j] = null;
+            }
+        }
+        setInitialPosicion();
+        repaint();
     }
 
 }
