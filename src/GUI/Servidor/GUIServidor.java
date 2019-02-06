@@ -13,12 +13,7 @@ public class GUIServidor {
 
     public GUIServidor() {
         clearButton.addActionListener((e) -> textArea1.setText(""));
-        exitButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.exit(0);
-            }
-        });
+        exitButton.addActionListener(e -> System.exit(0));
     }
 
     public JPanel getPanel1() {

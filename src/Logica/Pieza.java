@@ -5,8 +5,6 @@ import Utils.Recursos;
 import java.awt.image.BufferedImage;
 
 public class Pieza {
-    private int x;
-    private int y;
     private boolean blancas;
     private TipoPieza tipo;
 
@@ -18,9 +16,7 @@ public class Pieza {
         return tipo;
     }
 
-    public Pieza(int x, int y, boolean blancas, TipoPieza tipoPieza){
-        this.x = x;
-        this.y = y;
+    public Pieza(boolean blancas, TipoPieza tipoPieza){
         this.blancas = blancas;
         this.tipo = tipoPieza;
     }

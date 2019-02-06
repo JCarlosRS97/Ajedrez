@@ -13,21 +13,6 @@ public class Partida {
         players[1] = p2;
     }
 
-    public boolean isFull(){
-        return players[1] != null;
-    }
-
-    public void addPlayer(Player player) {
-/*        if(isFull()){
-            throw new ExcededPlayers();
-        }*/ //TODO mas adelante
-        if(players[0] == null){
-            players[0] = player;
-        }else{
-            players[1] = player;
-        }
-    }
-
     public Player getPlayer(int i){
         return players[i];
     }

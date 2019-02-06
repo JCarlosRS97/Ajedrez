@@ -22,17 +22,9 @@ public class RematchDialog extends JDialog {
 
         setTitle("Reto");
         lblInfo.setText("Te ha retado " + retador);
-        btnAceptar.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                onOK();
-            }
-        });
+        btnAceptar.addActionListener(e -> onOK());
 
-        btnRechazar.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                onCancel();
-            }
-        });
+        btnRechazar.addActionListener(e -> onCancel());
 
         // call onCancel() when cross is clicked
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);

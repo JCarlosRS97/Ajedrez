@@ -64,25 +64,25 @@ public class Tablero extends JPanel {
 
     private void setInitialPosicion(){
         for(int i = 0 ; i < TAM_TABLERO; i++){
-            tablero[i][1] = new Pieza(i, 1, true, TipoPieza.Peon);
-            tablero[i][6] = new Pieza(i, 1, false, TipoPieza.Peon);
+            tablero[i][1] = new Pieza( true, TipoPieza.Peon);
+            tablero[i][6] = new Pieza(false, TipoPieza.Peon);
         }
-        tablero[0][0] = new Pieza(0, 0, true, TipoPieza.Torre);
-        tablero[7][0] = new Pieza(7, 0, true, TipoPieza.Torre);
-        tablero[0][7] = new Pieza(7, 7, false, TipoPieza.Torre);
-        tablero[7][7] = new Pieza(7, 7, false, TipoPieza.Torre);
-        tablero[1][0] = new Pieza(1, 0, true, TipoPieza.Caballo);
-        tablero[6][0] = new Pieza(6, 0, true, TipoPieza.Caballo);
-        tablero[1][7] = new Pieza(1, 7, false, TipoPieza.Caballo);
-        tablero[6][7] = new Pieza(6, 7, false, TipoPieza.Caballo);
-        tablero[2][0] = new Pieza(2, 0, true, TipoPieza.Alfil);
-        tablero[5][0] = new Pieza(5, 0, true, TipoPieza.Alfil);
-        tablero[2][7] = new Pieza(2, 7, false, TipoPieza.Alfil);
-        tablero[5][7] = new Pieza(5, 7, false, TipoPieza.Alfil);
-        tablero[3][0] = new Pieza(3, 0, true, TipoPieza.Dama);
-        tablero[4][0] = new Pieza(4, 0, true, TipoPieza.Rey);
-        tablero[3][7] = new Pieza(3, 7, false, TipoPieza.Dama);
-        tablero[4][7] = new Pieza(4, 7, false, TipoPieza.Rey);
+        tablero[0][0] = new Pieza(true, TipoPieza.Torre);
+        tablero[7][0] = new Pieza(true, TipoPieza.Torre);
+        tablero[0][7] = new Pieza(false, TipoPieza.Torre);
+        tablero[7][7] = new Pieza(false, TipoPieza.Torre);
+        tablero[1][0] = new Pieza(true, TipoPieza.Caballo);
+        tablero[6][0] = new Pieza(true, TipoPieza.Caballo);
+        tablero[1][7] = new Pieza(false, TipoPieza.Caballo);
+        tablero[6][7] = new Pieza(false, TipoPieza.Caballo);
+        tablero[2][0] = new Pieza(true, TipoPieza.Alfil);
+        tablero[5][0] = new Pieza(true, TipoPieza.Alfil);
+        tablero[2][7] = new Pieza(false, TipoPieza.Alfil);
+        tablero[5][7] = new Pieza(false, TipoPieza.Alfil);
+        tablero[3][0] = new Pieza(true, TipoPieza.Dama);
+        tablero[4][0] = new Pieza(true, TipoPieza.Rey);
+        tablero[3][7] = new Pieza(false, TipoPieza.Dama);
+        tablero[4][7] = new Pieza(false, TipoPieza.Rey);
 
     }
 

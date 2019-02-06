@@ -8,7 +8,6 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class BaseGUI {
     private JPanel panel;
-    private JPanel partida;
     private JList list;
     private JButton btnConectar;
     private JButton btnRetar;
@@ -25,8 +24,6 @@ public class BaseGUI {
 
     public static final String HOME = "Home";
     public static final String PARTIDA = "Partida";
-    private final String[] opciones = {"Aceptar",
-            "Rechazar"};
 
     public BaseGUI(PanelCliente panelCliente) {
         tablero.add(panelCliente);

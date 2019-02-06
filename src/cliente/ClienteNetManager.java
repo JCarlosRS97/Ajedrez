@@ -107,10 +107,6 @@ public class ClienteNetManager extends NetworkClient implements Runnable {
         connect();
     }
 
-    public void closeConnection(){
-        conectado = false;
-    }
-
     private void finPartida(){
         panelCliente.setEnableBtnAbandonar(false);
         tablero.removeMouseListener(controlador);

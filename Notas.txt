@@ -1,4 +1,12 @@
 elo,cargar jugadores
 reloj(opcional)
-ajustar writer a null si conexcion erronea
-ajustar desconexion
+/*String[] children = dir.list();
+
+        if (children == null) {
+            System.out.println( "Either dir does not exist or is not a directory");
+        } else {
+            for (int i = 0; i< children.length; i++) {
+                String filename = children[i];
+                System.out.println(filename);
+            }
+        }*/

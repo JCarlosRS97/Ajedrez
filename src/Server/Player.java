@@ -2,7 +2,6 @@ package Server;
 
 import java.io.PrintWriter;
 import java.net.InetAddress;
-import java.util.concurrent.locks.ReentrantLock;
 
 public class Player {
     private InetAddress direction;
@@ -80,5 +79,14 @@ public class Player {
 
     public void setPartida(Partida partida) {
         this.partida = partida;
+    }
+
+    public int getPuntuacion() {
+        return puntuacion;
+    }
+
+    @Override
+    public String toString() {
+        return user + " " + puntuacion;
     }
 }
