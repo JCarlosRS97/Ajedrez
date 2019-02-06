@@ -22,7 +22,7 @@ public class ClienteModificado {
         panelCliente.controlador(controlador);
         baseGUI.controlador(controlador);
 
-        //frame.setSize(700, 700);
+        frame.setSize(700, 700);
         frame.setLocation(200, 200);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setContentPane(baseGUI.getPanel());

@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 public class PlayersManager {
     private ReentrantLock lock;
-    int numJugadores = 0;
+    private int numJugadores = 0;
     private Set<Player> players;
     private ArrayList<Partida> partidas;
     private GUIServidor guiServidor;
@@ -39,14 +39,13 @@ public class PlayersManager {
         Random random = new Random();
         p1.setBlancas(random.nextBoolean());
         p2.setBlancas(!p1.isBlancas());
-
         guiServidor.appendText(new StringBuilder(Thread.currentThread().getName()).append(": ")
                 .append(p1.getUser()).append(" es ").append(p1.isBlancas() ? "blancas\n" : "negras\n").toString());
-        p1.sendln(Comandos.SET_COLOR + " " + (p1.isBlancas()? "BLANCAS":"NEGRAS") + " " + p1.getUser());
+        p1.sendln(Comandos.SET_COLOR + " " + (p1.isBlancas()? "BLANCAS":"NEGRAS") + " " + p2.getUser());
 
         guiServidor.appendText(new StringBuilder(Thread.currentThread().getName()).append(": ").append(p2.getUser())
-                .append(" es ").append(!p1.isBlancas() ? "blancas\n" : "negras\n").toString());
-        p2.sendln(Comandos.SET_COLOR + " " + (!p1.isBlancas()? "BLANCAS":"NEGRAS") + p2.getUser() + p2.getUser());
+                .append(" es ").append(p2.isBlancas() ? "blancas\n" : "negras\n").toString());
+        p2.sendln(Comandos.SET_COLOR + " " + (p2.isBlancas()? "BLANCAS":"NEGRAS") + " " + p1.getUser());
 
         guiServidor.appendText("Comienza la partida " + (partidas.size()-1) + '\n');
         lock.unlock();

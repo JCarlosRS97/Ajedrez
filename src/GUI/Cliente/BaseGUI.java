@@ -1,23 +1,26 @@
 package GUI.Cliente;
 
+import Utils.Recursos;
+
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class BaseGUI {
     private JPanel panel;
     private JPanel partida;
-    private JPanel central;
     private JList list;
     private JButton btnConectar;
     private JButton btnRetar;
     private JTextField txtUser;
     private JLabel lblError;
+    private JPanel tablero;
+    private JLabel lblNegras;
+    private JLabel lblBlancas;
     private String user = null;
+    private String oponente;
     private DefaultListModel<String> model;
-    private Queue<RematchDialog> dialogs; //Acumula los dialogs de retos
+    private ConcurrentLinkedQueue<RematchDialog> dialogs; //Acumula los dialogs de retos
     private Controlador controlador;
 
     public static final String HOME = "Home";
@@ -26,12 +29,12 @@ public class BaseGUI {
             "Rechazar"};
 
     public BaseGUI(PanelCliente panelCliente) {
-        partida.add(panelCliente);
+        tablero.add(panelCliente);
         model = new DefaultListModel<>();
         list.setModel(model);
-        dialogs = new LinkedList<>();
-
-
+        dialogs = new ConcurrentLinkedQueue<>();
+        lblBlancas.setIcon(new ImageIcon(Recursos.getSpriteUser()));
+        lblNegras.setIcon(new ImageIcon(Recursos.getSpriteUser()));
     }
 
     public JPanel getPanel() {
@@ -47,7 +50,8 @@ public class BaseGUI {
     }
 
     public String getUser(){
-        user = txtUser.getText();
+        user = txtUser.getText().replaceAll("[,. \n]", "");
+        txtUser.setText(user);
         return user;
     }
 
@@ -99,9 +103,12 @@ public class BaseGUI {
     public void changePanel(String card){
         //Primero se deben eliminar los dialogs
         RematchDialog dialog = dialogs.poll();
-        while(dialog!= null){
-            dialog.dispose();
-            dialog = dialogs.poll();
+        if(dialog != null){
+            while(dialog!= null){
+                dialog.dispose();
+                dialog = dialogs.poll();
+            }
+
         }
         CardLayout c1 = (CardLayout) panel.getLayout();
         c1.show(panel, card);
@@ -115,4 +122,18 @@ public class BaseGUI {
         JOptionPane.showMessageDialog(panel, "Has perdido.", "Fin de partida", JOptionPane.INFORMATION_MESSAGE);
     }
 
+    public void setTxtUsers(boolean blancas, String oponente){
+        this.oponente = oponente;
+        if(blancas){
+            lblBlancas.setText(user);
+            lblNegras.setText(oponente);
+        }else {
+            lblBlancas.setText(oponente);
+            lblNegras.setText(user);
+        }
+    }
+
+    public String getOponente() {
+        return oponente;
+    }
 }

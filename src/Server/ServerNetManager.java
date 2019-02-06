@@ -52,6 +52,7 @@ public class ServerNetManager extends MultiThreadServer{
                             player = new Player(params[1], connection.getInetAddress(), connection.getPort(), out);
                             boolean ok = playersManager.addPlayer(player);
                             if (!ok) {
+                                player = null;
                                 guiServidor.appendText(Thread.currentThread().getName() + " -> El nombre de usuario ya esta en uso.\n");
                                 out.println(Comandos.CONNECT + " El,usuario,ya,existe.");
                                 conectado = false;
@@ -123,11 +124,20 @@ public class ServerNetManager extends MultiThreadServer{
             }
         }catch (SocketException e){
             //Si se cierra el canal
-            guiServidor.appendText(Thread.currentThread().getName() + ": Fin de la conexion por el usuario.\n");
+            guiServidor.appendText("Se ha cerrado el canal\n");
         }finally {
+            guiServidor.appendText(Thread.currentThread().getName() + ": Fin de la conexion por el usuario.\n");
             if(player != null){
                 playersManager.removePlayer(player);
                 playersManager.sendlnBroadcast(Comandos.DELETE_USERS + " " + player.getUser());
+                partida = player.getPartida();
+                if(player.isPlaying() && partida != null){
+                    oponente = partida.getOponente(player);
+                    oponente.setPlaying(false);
+                    oponente.setPartida(null);
+                    playersManager.removerPartida(partida);
+                    playersManager.sendlnBroadcast(Comandos.ADD_USERS + " " + oponente.getUser());
+                }
             }
         }
 

@@ -6,7 +6,6 @@ import Logica.TipoPieza;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Arrays;
 
 public class Tablero extends JPanel {
     private static final int TAM_TABLERO = 8;
@@ -16,6 +15,7 @@ public class Tablero extends JPanel {
     private int yMarcada = -1;
     private boolean color = false;
     private boolean turno = false;
+
     public Tablero(){
         tablero = new Pieza[TAM_TABLERO][TAM_TABLERO];
         setPreferredSize(new Dimension(TAM_TABLERO*TAM_CASILLA, TAM_TABLERO*TAM_CASILLA));

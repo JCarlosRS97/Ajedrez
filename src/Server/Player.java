@@ -52,10 +52,14 @@ public class Player {
     public boolean equals(Object obj) {
         if(obj instanceof Player){
             Player player2 = (Player) obj;
-            return player2.getDirection().equals(direction) && player2.getPort() == port
-                    && player2.getUser().equals(user);
+            return player2.getUser().equals(user);
         }
         return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return user.hashCode();
     }
 
     public synchronized void sendln(String s){

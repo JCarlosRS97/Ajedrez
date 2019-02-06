@@ -47,7 +47,7 @@ public class RematchDialog extends JDialog {
     private void onOK() {
         // add your code here
         controlador.sendln(Comandos.MATCH_ACK + " " + retador);
-        dispose();
+        // dispose(); No es necesario ya se realiza mas adelante
     }
 
     private void onCancel() {

@@ -11,6 +11,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.Arrays;
 
 public class ClienteNetManager extends NetworkClient implements Runnable {
     private Tablero tablero;
@@ -46,6 +47,7 @@ public class ClienteNetManager extends NetworkClient implements Runnable {
                         baseGUI.changePanel(BaseGUI.PARTIDA);
                         boolean isBlancas = params[1].equalsIgnoreCase("BLANCAS");
                         panelCliente.setColorAndWrite(isBlancas);
+                        baseGUI.setTxtUsers(isBlancas, params[2]);
                         panelCliente.setEnableBtnAbandonar(true);
                         panelCliente.setEnableBtnVolver(false);
                         break;
@@ -54,10 +56,7 @@ public class ClienteNetManager extends NetworkClient implements Runnable {
                                 Integer.parseInt(params[3]), Integer.parseInt(params[4]));
                         break;
                     case GIVE_UP:
-                        panelCliente.setEnableBtnAbandonar(false);
-                        tablero.removeMouseListener(controlador);
-                        baseGUI.showWinnerDialog();
-                        panelCliente.setEnableBtnVolver(true);
+                        finPartida();
                         break;
                     case CONNECT:
                         if(!params[1].equalsIgnoreCase("ACK")){
@@ -76,8 +75,18 @@ public class ClienteNetManager extends NetworkClient implements Runnable {
                             baseGUI.addList(params[1].split(","));
                         break;
                     case DELETE_USERS:
-                        if(params.length>=2)
-                            baseGUI.deleteUserList(params[1].split(","));
+                        if(params.length>=2){
+                            String users[] = params[1].split(",");
+                            baseGUI.deleteUserList(users);
+                            if(tablero.getMouseListeners().length != 0){
+                                //Si esta en juego una partida
+                                if(Arrays.stream(users).anyMatch(e -> e.equals(baseGUI.getOponente()))){
+                                    finPartida();
+                                }
+                            }
+
+
+                        }
                         break;
                     case MATCH:
                         //Se recibe un reto
@@ -100,5 +109,12 @@ public class ClienteNetManager extends NetworkClient implements Runnable {
 
     public void closeConnection(){
         conectado = false;
+    }
+
+    private void finPartida(){
+        panelCliente.setEnableBtnAbandonar(false);
+        tablero.removeMouseListener(controlador);
+        baseGUI.showWinnerDialog();
+        panelCliente.setEnableBtnVolver(true);
     }
 }
