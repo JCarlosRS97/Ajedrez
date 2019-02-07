@@ -1,6 +1,6 @@
 package Logica;
 
-import Utils.Recursos;
+import Utils.RecursosCliente;
 
 import java.awt.image.BufferedImage;
 
@@ -22,6 +22,6 @@ public class Pieza {
     }
 
     public BufferedImage getSprite(){
-        return Recursos.getSpritePieza(tipo, blancas);
+        return RecursosCliente.getSpritePieza(tipo, blancas);
     }
 }

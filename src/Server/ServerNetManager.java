@@ -30,7 +30,7 @@ public class ServerNetManager extends MultiThreadServer{
         Player player = null;
         Player oponente;
         Partida partida;
-        guiServidor.appendText("Se intenta conectar un jugador\n");
+        guiServidor.appendText("Nueva conexion.\n");
 
         try {
             while (conectado) {
@@ -49,12 +49,21 @@ public class ServerNetManager extends MultiThreadServer{
                                 conectado = false;
                                 break;
                             }
-                            player = new Player(params[1], connection.getInetAddress(), connection.getPort(), out);
-                            boolean ok = playersManager.addPlayer(player);
+                            //player = new Player(params[1], connection.getInetAddress(), connection.getPort(), out);
+                            player = UserData.loadUser(params[1]);
+                            boolean ok = false;
+                            if(player != null){
+                                player.setWriter(out);
+                                ok = playersManager.addPlayer(player);
+                            }else {
+                                guiServidor.appendText(Thread.currentThread().getName() + " -> El nombre de usuario ya esta en uso.\n");
+                                out.println(Comandos.CONNECT + " El,usuario,no,existe.");
+                                conectado = false;
+                            }
                             if (!ok) {
                                 player = null;
-                                guiServidor.appendText(Thread.currentThread().getName() + " -> El nombre de usuario ya esta en uso.\n");
-                                out.println(Comandos.CONNECT + " El,usuario,ya,existe.");
+                                guiServidor.appendText(Thread.currentThread().getName() + " -> El usuario ya esta conectado.\n");
+                                out.println(Comandos.CONNECT + " El,usuario,ya,esta,conectado");
                                 conectado = false;
                             } else {
                                 guiServidor.appendText(player.getUser() + " se ha conectado correctamente.\n");
@@ -118,6 +127,11 @@ public class ServerNetManager extends MultiThreadServer{
                                 guiServidor.appendText("Se ha producido un error en la partida.\n");
                             }
                             break;
+                        case NEW_USER:
+                            guiServidor.appendText("Se ha añadido el jugador: " + params[1]);
+                            UserData.saveUser(new Player(params[1], null, 0, null));
+                            conectado = false;
+                            break;
                     }
 
                 }
@@ -138,6 +152,7 @@ public class ServerNetManager extends MultiThreadServer{
                     playersManager.removerPartida(partida);
                     playersManager.sendlnBroadcast(Comandos.ADD_USERS + " " + oponente.getUser());
                 }
+                UserData.saveUser(player);
             }
         }
 

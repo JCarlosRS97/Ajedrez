@@ -8,14 +8,14 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-public class Recursos {
+public class RecursosCliente {
     private static BufferedImage piezas;
     private static Image user;
 
     static {
         try {
-            piezas = ImageIO.read(new File("ChessPiecesArray.png"));
-            user = ImageIO.read(new File("user.png")).getScaledInstance(40, 35,  java.awt.Image.SCALE_SMOOTH);
+            piezas = ImageIO.read(new File("Resources/ChessPiecesArray.png"));
+            user = ImageIO.read(new File("Resources/user.png")).getScaledInstance(40, 35,  java.awt.Image.SCALE_SMOOTH);
         } catch (IOException e) {
             System.out.println("No ha sido posible cargar los recursos.");
             System.exit(-1);

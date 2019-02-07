@@ -1,6 +1,6 @@
 package GUI.Cliente;
 
-import Utils.Recursos;
+import Utils.RecursosCliente;
 
 import javax.swing.*;
 import java.awt.*;
@@ -30,8 +30,8 @@ public class BaseGUI {
         model = new DefaultListModel<>();
         list.setModel(model);
         dialogs = new ConcurrentLinkedQueue<>();
-        lblBlancas.setIcon(new ImageIcon(Recursos.getSpriteUser()));
-        lblNegras.setIcon(new ImageIcon(Recursos.getSpriteUser()));
+        lblBlancas.setIcon(new ImageIcon(RecursosCliente.getSpriteUser()));
+        lblNegras.setIcon(new ImageIcon(RecursosCliente.getSpriteUser()));
     }
 
     public JPanel getPanel() {

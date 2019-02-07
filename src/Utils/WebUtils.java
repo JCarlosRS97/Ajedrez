@@ -4,7 +4,7 @@ import java.io.PrintWriter;
 import java.util.List;
 
 public class WebUtils {
-	public static void printHeader(PrintWriter out, String serverName) {
+	public static void printConfirmPage(PrintWriter out, String serverName) {
 		out.println
 		("HTTP/1.1 200 OK\r\n" +
 		"Server: " + serverName + "\r\n" +
@@ -18,11 +18,17 @@ public class WebUtils {
 		"</head>\n" +
 		"\n" +
 		"<body bgcolor=\"#fdf5e6\">\n" +
-		"<h1 align=\"center\">" + serverName + "</h1>\n" +
-		"Here are the request line and request headers\n" +
-		"sent by your browser:\n" +
-		"<pre>");
+		"<h1 align=\"center\">Gracias por registrarte.</h1>\n" +
+		"</body></html>\n");
 	}
+
+    public static void printPage(PrintWriter out, String serverName, String page) {
+        out.println
+                (new StringBuilder().append("HTTP/1.1 200 OK\r\n").append("Server: ").
+                        append(serverName).append("\r\n").append("Content-Type: text/html\r\n")
+                        .append("\r\n").append(page).toString());
+    }
+
 	public static boolean usingPost(List<String> inputLines) {
 		return (inputLines.get(0).toUpperCase().startsWith("POST"));
 	}

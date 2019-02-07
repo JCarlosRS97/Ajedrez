@@ -89,4 +89,8 @@ public class Player {
     public String toString() {
         return user + " " + puntuacion;
     }
+
+    public void setWriter(PrintWriter out) {
+        this.out = out;
+    }
 }
