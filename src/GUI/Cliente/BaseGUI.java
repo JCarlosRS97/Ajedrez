@@ -16,6 +16,7 @@ public class BaseGUI {
     private JPanel tablero;
     private JLabel lblNegras;
     private JLabel lblBlancas;
+    private JPasswordField txtPassword;
     private String user = null;
     private String oponente;
     private DefaultListModel<String> model;
@@ -51,6 +52,12 @@ public class BaseGUI {
         txtUser.setText(user);
         return user;
     }
+
+    public String getPassword(){
+        return String.valueOf(txtPassword.getPassword());
+    }
+
+    public void setEnableTxtPassword(boolean enable) { txtPassword.setEditable(enable); }
 
     public String getSelectedItem(){
         return (String)list.getSelectedValue();

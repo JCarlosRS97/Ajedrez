@@ -7,7 +7,7 @@ import javax.swing.*;
 public class MainPWeb {
 
     public static void main(String[] args) {
-        final JFrame frame = new JFrame("Servidor");
+        final JFrame frame = new JFrame("Servidor http");
         GUIPWeb guiServidor = new GUIPWeb();
         SwingUtilities.invokeLater(new Runnable() {
             @Override

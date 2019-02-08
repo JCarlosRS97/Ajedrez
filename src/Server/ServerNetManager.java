@@ -43,21 +43,20 @@ public class ServerNetManager extends MultiThreadServer{
                     params = line.split(" ");
                     switch (Comandos.valueOf(params[0])) {
                         case CONNECT:
-                            if (params.length < 2) {
-                                guiServidor.appendText(Thread.currentThread().getName() + " -> " + "No ha escrito ningun usuario.\n");
-                                out.println(Comandos.CONNECT + " Introduzca,un,usuario.");
+                            if (params.length < 3) {
+                                guiServidor.appendText(Thread.currentThread().getName() + " -> " + "No ha rellenado los campos.\n");
+                                out.println(Comandos.CONNECT + " Introduzca,un,usuario,y,una,contraseña.");
                                 conectado = false;
                                 break;
                             }
-                            //player = new Player(params[1], connection.getInetAddress(), connection.getPort(), out);
-                            player = UserData.loadUser(params[1]);
+                            player = UserData.loadUser(params[1], params[2]);
                             boolean ok = false;
                             if(player != null){
                                 player.setWriter(out);
                                 ok = playersManager.addPlayer(player);
                             }else {
-                                guiServidor.appendText(Thread.currentThread().getName() + " -> El nombre de usuario ya esta en uso.\n");
-                                out.println(Comandos.CONNECT + " El,usuario,no,existe.");
+                                guiServidor.appendText(Thread.currentThread().getName() + " -> Los datos son incorrectos.\n");
+                                out.println(Comandos.CONNECT + " Los,datos,son,incorrectos.");
                                 conectado = false;
                             }
                             if (!ok) {
@@ -128,8 +127,8 @@ public class ServerNetManager extends MultiThreadServer{
                             }
                             break;
                         case NEW_USER:
-                            guiServidor.appendText("Se ha añadido el jugador: " + params[1]);
-                            UserData.saveUser(new Player(params[1], null, 0, null));
+                            guiServidor.appendText("Se ha añadido el jugador: " + params[1] + '\n');
+                            UserData.saveNewUser(params[1], params[2]);
                             conectado = false;
                             break;
                     }

@@ -34,7 +34,7 @@ public class ClienteNetManager extends NetworkClient implements Runnable {
         BufferedReader in = SocketUtils.getReader(client);
         String line;
         String[] params;
-        out.printf("%s %s\n", Comandos.CONNECT, controlador.getUser());
+        out.printf("%s %s %s\n", Comandos.CONNECT, controlador.getUser(), baseGUI.getPassword());
         controlador.setWriterSocket(out);
         while(conectado){
             line = in.readLine();
@@ -60,10 +60,12 @@ public class ClienteNetManager extends NetworkClient implements Runnable {
                         break;
                     case CONNECT:
                         if(!params[1].equalsIgnoreCase("ACK")){
+                            //Si ha fallado el login
                             conectado = false;
                             baseGUI.setTextError(params[1].replaceAll(",", " "));
                             baseGUI.setEnableBtnConectar(true);
                             baseGUI.setEnableTxtUser(true);
+                            baseGUI.setEnableTxtPassword(true);
                         }else{
                             //Si el cliente se conecta de forma correcta
                             baseGUI.setTextErrorVisible(false);
@@ -84,8 +86,6 @@ public class ClienteNetManager extends NetworkClient implements Runnable {
                                     finPartida();
                                 }
                             }
-
-
                         }
                         break;
                     case MATCH:

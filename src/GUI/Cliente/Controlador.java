@@ -34,6 +34,7 @@ public class Controlador implements ActionListener, MouseListener {
             user = baseGUI.getUser();
             baseGUI.setEnableBtnConectar(false);
             baseGUI.setEnableTxtUser(false);
+            baseGUI.setEnableTxtPassword(false);
             netManager = new ClienteNetManager(host, port, panelCliente, baseGUI, this);
             Thread connection = new Thread(netManager);
             connection.setName("Thread_Red");

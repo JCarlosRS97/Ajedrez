@@ -12,7 +12,7 @@ public class UserData {
         }
     }
 
-    public static Player loadUser(String user){
+    public static Player loadUser(String user, String password){
         String[] ficheros = dir.list();
         if (ficheros == null){
             return null;
@@ -28,12 +28,29 @@ public class UserData {
         } catch (IOException e) {
             return null;
         }
-        return new Player(ficheros[n], null, 0, null, Integer.valueOf(params[0]));
+        if(params[0].equals(password))
+            return new Player(user, null, 0, null, Integer.valueOf(params[1]));
+        else
+            return null;
     }
 
     public static void saveUser(Player player) throws FileNotFoundException {
-        PrintWriter writer = new PrintWriter(dir.getPath() + "/" + player.getUser());
-        writer.println(player.getPuntuacion());
+        BufferedReader reader = new BufferedReader(new FileReader(dir.getPath() + "/" + player.getUser()));
+        String params[] = null;
+        try {
+            params = reader.readLine().split(" ");
+            reader.close();
+            PrintWriter writer = new PrintWriter(dir.getPath() + "/" + player.getUser());
+            writer.println(params[1] + " " +  player.getPuntuacion());
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void saveNewUser(String user, String password) throws FileNotFoundException {
+        PrintWriter writer = new PrintWriter(dir.getPath() + "/" + user);
+        writer.println(password + " 1500");
         writer.close();
     }
 
@@ -58,7 +75,6 @@ public class UserData {
             userData.saveUser(new Player("isabel", null, 0, null, 1003));
             userData.saveUser(new Player("leonardo", null, 0, null, 1003));
             userData.saveUser(new Player("curro", null, 0, null, 1003));
-            System.out.println(userData.loadUser("alfonso"));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }

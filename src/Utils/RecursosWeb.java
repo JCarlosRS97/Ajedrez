@@ -12,7 +12,6 @@ public class RecursosWeb {
         String line;
         try {
             loginWeb = loadFile("Resources/PWebLogin.html");
-            errorLoginWeb = loadFile("Resources/PWebLoginError.html");
 
         } catch (IOException e) {
             System.out.println("No ha sido posible cargar los recursos.");
@@ -24,8 +23,9 @@ public class RecursosWeb {
         return loginWeb;
     }
 
-    public static String getErrorLoginWeb() {
-        return errorLoginWeb;
+    public static String getLoginWeb(String s, int r, int b, int g) {
+        return loginWeb.replace("</body>\n",
+        String.format("<p align=\"center\" style = \"color:#%02X%02X%02X\" >%s</p></body>\n", r, g, b, s));
     }
 
     private static String loadFile(String path) throws IOException{
