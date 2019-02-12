@@ -1,4 +1,4 @@
-package cliente;
+package Utils;
 
 import java.io.IOException;
 import java.net.Socket;

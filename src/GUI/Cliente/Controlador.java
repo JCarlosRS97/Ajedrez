@@ -4,10 +4,7 @@ import Logica.Comandos;
 import Logica.Movimiento;
 import cliente.ClienteNetManager;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.*;
 import java.io.PrintWriter;
 
 public class Controlador implements ActionListener, MouseListener {
@@ -32,13 +29,17 @@ public class Controlador implements ActionListener, MouseListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equalsIgnoreCase("CONECTAR")) {
             user = baseGUI.getUser();
-            baseGUI.setEnableBtnConectar(false);
-            baseGUI.setEnableTxtUser(false);
-            baseGUI.setEnableTxtPassword(false);
-            netManager = new ClienteNetManager(host, port, panelCliente, baseGUI, this);
-            Thread connection = new Thread(netManager);
-            connection.setName("Thread_Red");
-            connection.start();
+            if(user.matches("^.*[^a-zA-Z0-9].*$") || baseGUI.getPassword().matches("^.*[^a-zA-Z0-9].*$")){
+                baseGUI.setTextError("Solo se pueden usar caracteres alfanumericos.");
+            }else {
+                baseGUI.setEnableBtnConectar(false);
+                baseGUI.setEnableTxtUser(false);
+                baseGUI.setEnableTxtPassword(false);
+                netManager = new ClienteNetManager(host, port, panelCliente, baseGUI, this);
+                Thread connection = new Thread(netManager);
+                connection.setName("Thread_Red");
+                connection.start();
+            }
         }else if(e.getActionCommand().equalsIgnoreCase("RETAR")){
             String s = baseGUI.getSelectedItem();
             if(s != null)
@@ -51,6 +52,11 @@ public class Controlador implements ActionListener, MouseListener {
             tablero.removeMouseListener(this);
         }else if(e.getActionCommand().equalsIgnoreCase("VOLVER")){
             baseGUI.changePanel(BaseGUI.HOME);
+        } else if(e.getActionCommand().equalsIgnoreCase("SEND")) {
+            //hay que proteger los espacios con un caracter no imprimible
+            out.println(Comandos.SEND_MSG + " <b>" + user +
+                    ("</b>: " + baseGUI.getMsg()).replace(" ", Character.valueOf((char)29).toString()) + "<br>");
+            baseGUI.clearMsg();
         } else {
             System.err.println("Evento no esperado " + e.getSource().toString());
         }

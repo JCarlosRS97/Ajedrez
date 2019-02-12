@@ -9,6 +9,7 @@ public class GUIServidor {
     private JButton clearButton;
     private JButton exitButton;
     private JTextArea textArea1;
+    private JScrollPane scroll;
 
 
     public GUIServidor() {
@@ -22,6 +23,7 @@ public class GUIServidor {
 
     public void appendText(String s){
         textArea1.append(s);
+        scroll.getVerticalScrollBar().setValue(scroll.getVerticalScrollBar().getMaximum());
     }
 
 }

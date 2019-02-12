@@ -3,7 +3,20 @@ package GUI.Cliente;
 import Utils.RecursosCliente;
 
 import javax.swing.*;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
+import javax.swing.text.html.HTML;
+import javax.swing.text.html.HTMLDocument;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class BaseGUI {
@@ -17,11 +30,17 @@ public class BaseGUI {
     private JLabel lblNegras;
     private JLabel lblBlancas;
     private JPasswordField txtPassword;
+    private JButton noTienesCuentaClickButton;
+    private JTextField txtMsg;
+    private JButton btnSend;
+    private JLabel infoPlayer;
+    private JEditorPane txtPane;
     private String user = null;
     private String oponente;
     private DefaultListModel<String> model;
     private ConcurrentLinkedQueue<RematchDialog> dialogs; //Acumula los dialogs de retos
     private Controlador controlador;
+    private final HTMLDocument doc;
 
     public static final String HOME = "Home";
     public static final String PARTIDA = "Partida";
@@ -33,6 +52,34 @@ public class BaseGUI {
         dialogs = new ConcurrentLinkedQueue<>();
         lblBlancas.setIcon(new ImageIcon(RecursosCliente.getSpriteUser()));
         lblNegras.setIcon(new ImageIcon(RecursosCliente.getSpriteUser()));
+        noTienesCuentaClickButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Desktop desktop = Desktop.getDesktop();
+                try {
+                    desktop.browse(new URI("http://localhost"));
+                } catch (IOException | URISyntaxException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        });
+        txtPassword.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                super.keyReleased(e);
+                if(e.getKeyChar() == '\n')
+                   btnConectar.doClick();
+            }
+        });
+        txtMsg.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                super.keyReleased(e);
+                if(e.getKeyChar() == '\n')
+                    btnSend.doClick();
+            }
+        });
+        doc = (HTMLDocument) txtPane.getDocument();
     }
 
     public JPanel getPanel() {
@@ -43,13 +90,14 @@ public class BaseGUI {
         this.controlador = controlador;
         btnConectar.setActionCommand("CONECTAR");
         btnRetar.setActionCommand("RETAR");
+        btnSend.setActionCommand("SEND");
         btnRetar.addActionListener(controlador);
         btnConectar.addActionListener(controlador);
+        btnSend.addActionListener(controlador);
     }
 
     public String getUser(){
-        user = txtUser.getText().replaceAll("[,. \n]", "");
-        txtUser.setText(user);
+        user = txtUser.getText();
         return user;
     }
 
@@ -139,5 +187,22 @@ public class BaseGUI {
 
     public String getOponente() {
         return oponente;
+    }
+
+    public String getMsg(){ return txtMsg.getText(); }
+
+    public void setChatMsg(String str){
+        try {
+            doc.insertBeforeEnd(doc.getElement(doc.getDefaultRootElement(), StyleConstants.NameAttribute, HTML.Tag.P), str);
+            System.out.println(txtPane.getText());
+        } catch (IOException| BadLocationException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void clearMsg(){ txtMsg.setText(""); }
+
+    public void setInfoTxt(String puntuacion) {
+        infoPlayer.setText("<html><body>Jugador: " + user + "<br>Puntuacion: " + puntuacion + "</body></html>");
     }
 }

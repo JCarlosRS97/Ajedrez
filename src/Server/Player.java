@@ -13,6 +13,8 @@ public class Player {
     private Partida partida = null;
     private int puntuacion;
 
+    private final float K = 40;
+
     public String getUser() {
         return user;
     }
@@ -92,5 +94,11 @@ public class Player {
 
     public void setWriter(PrintWriter out) {
         this.out = out;
+    }
+
+    public void setPuntuacionUpdate(int oponente, double res){
+        //Se utiliza el algoritmo de elo
+        double e = 1/(1 + Math.pow(10.0, ((double) oponente - (double)puntuacion)/400));
+        puntuacion += K*(res - e);
     }
 }

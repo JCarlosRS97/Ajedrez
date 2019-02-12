@@ -6,10 +6,7 @@ import java.io.IOException;
 
 public class RecursosWeb {
     private static String loginWeb;
-    private static String errorLoginWeb;
     static {
-        StringBuilder str = new StringBuilder();
-        String line;
         try {
             loginWeb = loadFile("Resources/PWebLogin.html");
 

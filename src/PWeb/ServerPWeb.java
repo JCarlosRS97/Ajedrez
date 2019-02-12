@@ -1,8 +1,7 @@
 package PWeb;
 
 import GUI.ServidorPWeb.GUIPWeb;
-import Server.MultiThreadServer;
-import Server.UserData;
+import Utils.MultiThreadServer;
 import Utils.RecursosWeb;
 import Utils.SocketUtils;
 import Utils.WebUtils;
@@ -43,15 +42,21 @@ public class ServerPWeb extends MultiThreadServer {
                         String postData = new String(data, 0, chars);
                         inputLines.add(postData);
                         String params[] = postData.split("[=&]");
+                        //String prueba[] = postData.split("(user=|password=|&)"); No merece la pena siguen siendo 4 elementos en el array
                         if(params.length < 4){
+                            //Quedan campos por rellenar
                             WebUtils.printPage(out, name, RecursosWeb.getLoginWeb(
                                     "Hay que rellenar todos los campos", 255, 0, 0));
+                        }else if(params[1].matches("^.*[^a-zA-Z0-9].*$") || params[3].matches("^.*[^a-zA-Z0-9].*$")) {
+                            //Quedan campos por rellenar
+                            WebUtils.printPage(out, name, RecursosWeb.getLoginWeb(
+                                    "Solo se puede usar caracteres alfanumericos.", 255, 0, 0));
                         }else {
-                            guipWeb.appendln("Nuevo registro capturado.");
-                            guipWeb.appendln("User: " + params[1]);
-                            guipWeb.appendln("Password: " + params[3]);
-                            UserRegister userRegister = new UserRegister(name, out, params[1], params[3], guipWeb);
-                            userRegister.connect();
+                                guipWeb.appendln("Nuevo registro capturado.");
+                                guipWeb.appendln("User: " + params[1]);
+                                guipWeb.appendln("Password: " + params[3]);
+                                UserRegister userRegister = new UserRegister(name, out, params[1], params[3], guipWeb);
+                                userRegister.connect();
                         }
                     }else{
                         WebUtils.printPage(out, name, RecursosWeb.getLoginWeb());

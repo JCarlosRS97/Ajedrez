@@ -2,16 +2,13 @@ package PWeb;
 
 import GUI.ServidorPWeb.GUIPWeb;
 import Logica.Comandos;
-import Utils.RecursosWeb;
 import Utils.SocketUtils;
 import Utils.WebUtils;
-import cliente.NetworkClient;
+import Utils.NetworkClient;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.net.SocketException;
 
 public class UserRegister extends NetworkClient {
     private String user;
@@ -31,24 +28,9 @@ public class UserRegister extends NetworkClient {
 
     @Override
     protected void handleConnection(Socket client) throws IOException {
-        boolean error = false;
-        try {
-            PrintWriter out = SocketUtils.getWriter(client);
-            out.println(Comandos.NEW_USER + " " + user + " " + password);
-        }catch (IOException e){
-            //Si ha habido error se modifica la pagina web
-            error = true;
-            //Se relanza el error
-            throw new IOException();
-        }finally {
-            if(error) {
-                WebUtils.printPage(pageWriter, serverName,
-                        RecursosWeb.getLoginWeb("No se ha podido registar el usuario. Pruebe más tarde.", 255, 0, 0));
-                guipWeb.appendln("No se ha podido enviar correctamente el nuevo usuario.");
-            } else {
-                WebUtils.printConfirmPage(pageWriter, serverName);
-                guipWeb.appendln("Se ha enviado el usuario correctamente.");
-            }
-        }
+        PrintWriter out = SocketUtils.getWriter(client);
+        out.println(Comandos.NEW_USER + " " + user + " " + password);
+        WebUtils.printConfirmPage(pageWriter, serverName);
+        guipWeb.appendln("Se ha enviado el usuario correctamente.");
     }
 }

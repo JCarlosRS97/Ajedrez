@@ -1,6 +1,7 @@
 package Logica;
 
-public enum Comandos { SET_COLOR, MOVE, GIVE_UP, CONNECT, ADD_USERS, DELETE_USERS, MATCH, MATCH_ACK, NEW_USER
+public enum Comandos { SET_COLOR, MOVE, GIVE_UP, CONNECT, ADD_USERS, DELETE_USERS, MATCH, MATCH_ACK,
+    NEW_USER, SEND_MSG, ELO_UPDATE
     /*
     * SET_COLOR color oponente
     * MOVE origen destino

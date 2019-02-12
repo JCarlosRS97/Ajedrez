@@ -2,6 +2,7 @@ package Server;
 
 import GUI.Servidor.GUIServidor;
 import Logica.Comandos;
+import Utils.MultiThreadServer;
 import Utils.SocketUtils;
 
 import java.io.BufferedReader;
@@ -10,7 +11,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.SocketException;
 
-public class ServerNetManager extends MultiThreadServer{
+public class ServerNetManager extends MultiThreadServer {
     private GUIServidor guiServidor;
     private PlayersManager playersManager;
     public ServerNetManager(int port, GUIServidor guiServidor, PlayersManager playersManager) {
@@ -66,7 +67,7 @@ public class ServerNetManager extends MultiThreadServer{
                                 conectado = false;
                             } else {
                                 guiServidor.appendText(player.getUser() + " se ha conectado correctamente.\n");
-                                player.sendln(Comandos.CONNECT + " ACK");
+                                player.sendln(Comandos.CONNECT + " ACK " + player.getPuntuacion());
                                 player.sendln(Comandos.ADD_USERS + " " + playersManager.getMyPlayers(player));
                                 //Se envia el nuevo usuario la resto
                                 playersManager.sendlnBroadcast(Comandos.ADD_USERS + " " + player.getUser());
@@ -111,6 +112,10 @@ public class ServerNetManager extends MultiThreadServer{
                                     guiServidor.appendText(player.getUser() + " se ha rendido.\n");
                                     oponente = partida.getOponente(player);
                                     oponente.sendln(line);
+                                    oponente.setPuntuacionUpdate(player.getPuntuacion(), 1.0);
+                                    oponente.sendln(Comandos.ELO_UPDATE + " " + oponente.getPuntuacion());
+                                    player.setPuntuacionUpdate(oponente.getPuntuacion(), 0.0);
+                                    player.sendln(Comandos.ELO_UPDATE + " " + player.getPuntuacion());
                                     //Se gestiona la reintroduccion en la lista de los jugadores
                                     oponente.setPlaying(false);
                                     player.setPlaying(false);
@@ -130,6 +135,9 @@ public class ServerNetManager extends MultiThreadServer{
                             guiServidor.appendText("Se ha añadido el jugador: " + params[1] + '\n');
                             UserData.saveNewUser(params[1], params[2]);
                             conectado = false;
+                            break;
+                        case SEND_MSG:
+                            playersManager.sendlnBroadcast(Comandos.SEND_MSG + " " + params[1]);
                             break;
                     }
 

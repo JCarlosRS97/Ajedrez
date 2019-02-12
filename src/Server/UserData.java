@@ -18,7 +18,7 @@ public class UserData {
             return null;
         }
         int n = Arrays.binarySearch(ficheros, user);
-        String params[] = null;
+        String params[];
         if(n < 0)
             return null;
         try {
@@ -36,12 +36,11 @@ public class UserData {
 
     public static void saveUser(Player player) throws FileNotFoundException {
         BufferedReader reader = new BufferedReader(new FileReader(dir.getPath() + "/" + player.getUser()));
-        String params[] = null;
         try {
-            params = reader.readLine().split(" ");
+            String[] params = reader.readLine().split(" ");
             reader.close();
             PrintWriter writer = new PrintWriter(dir.getPath() + "/" + player.getUser());
-            writer.println(params[1] + " " +  player.getPuntuacion());
+            writer.println(params[0] + " " +  player.getPuntuacion());
             writer.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -54,16 +53,13 @@ public class UserData {
         writer.close();
     }
 
-    public void display(){
+    private void display(){
         String[] children = dir.list();
 
         if (children == null) {
             System.out.println( "Either dir does not exist or is not a directory");
         } else {
-            for (int i = 0; i< children.length; i++) {
-                String filename = children[i];
-                System.out.println(filename);
-            }
+            Arrays.stream(children).forEach(System.out::println);
         }
     }
 

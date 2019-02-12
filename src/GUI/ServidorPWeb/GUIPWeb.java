@@ -7,6 +7,7 @@ public class GUIPWeb {
     private JButton clearButton;
     private JButton exitButton;
     private JPanel panel;
+    private JScrollPane scroll;
 
     public GUIPWeb() {
         clearButton.addActionListener((e) -> textArea1.setText(""));
@@ -19,5 +20,6 @@ public class GUIPWeb {
 
     public void appendln(String s){
         textArea1.append(s + '\n');
+        scroll.getVerticalScrollBar().setValue(scroll.getVerticalScrollBar().getMaximum());
     }
 }

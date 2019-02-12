@@ -5,6 +5,7 @@ import GUI.Cliente.Controlador;
 import GUI.Cliente.PanelCliente;
 import GUI.Cliente.Tablero;
 import Logica.Comandos;
+import Utils.NetworkClient;
 import Utils.SocketUtils;
 
 import java.io.BufferedReader;
@@ -68,8 +69,10 @@ public class ClienteNetManager extends NetworkClient implements Runnable {
                             baseGUI.setEnableTxtPassword(true);
                         }else{
                             //Si el cliente se conecta de forma correcta
+                            baseGUI.changePanel(BaseGUI.HOME);
                             baseGUI.setTextErrorVisible(false);
                             baseGUI.setEnableBtnRetar(true);
+                            baseGUI.setInfoTxt(params[2]);
                         }
                         break;
                     case ADD_USERS:
@@ -91,6 +94,12 @@ public class ClienteNetManager extends NetworkClient implements Runnable {
                     case MATCH:
                         //Se recibe un reto
                         baseGUI.askForMatch(params[1]); // Se le pasa el usuario retador
+                        break;
+                    case SEND_MSG:
+                        baseGUI.setChatMsg(params[1].replace(Character.valueOf((char)29).toString(), " "));
+                        break;
+                    case ELO_UPDATE:
+                        baseGUI.setInfoTxt(params[1]);
                         break;
                 }
             }else{
