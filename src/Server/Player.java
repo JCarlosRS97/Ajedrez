@@ -1,11 +1,8 @@
 package Server;
 
 import java.io.PrintWriter;
-import java.net.InetAddress;
 
 public class Player {
-    private InetAddress direction;
-    private int port;
     private boolean isBlancas;
     private PrintWriter out;
     private String user;
@@ -19,26 +16,15 @@ public class Player {
         return user;
     }
 
-    public Player(String user, InetAddress direction, int port, PrintWriter out, int puntuacion){
+    public Player(String user, PrintWriter out, int puntuacion){
         this.user = user;
-        this.direction = direction;
-        this.port = port;
         this.out = out;
         playing = false;
         this.puntuacion = puntuacion;
     }
 
-    public Player(String user, InetAddress direction, int port, PrintWriter out){
-        this(user, direction, port, out, 1500);
-    }
-
-
-    public InetAddress getDirection() {
-        return direction;
-    }
-
-    public int getPort() {
-        return port;
+    public Player(String user, PrintWriter out){
+        this(user, out, 1500);
     }
 
     public boolean isBlancas() {

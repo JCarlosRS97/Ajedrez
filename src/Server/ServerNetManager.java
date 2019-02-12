@@ -132,8 +132,14 @@ public class ServerNetManager extends MultiThreadServer {
                             }
                             break;
                         case NEW_USER:
-                            guiServidor.appendText("Se ha añadido el jugador: " + params[1] + '\n');
-                            UserData.saveNewUser(params[1], params[2]);
+                            boolean res = UserData.saveNewUser(params[1], params[2]);
+                            if(res){
+                                out.println(Comandos.NEW_USER + " ACK\n");
+                                guiServidor.appendText("Se ha añadido el jugador: " + params[1] + '\n');
+                            } else{
+                                out.println(Comandos.NEW_USER + " ERROR\n");
+                                guiServidor.appendText("El jugador " + params[1] + " ya existe.\n");
+                            }
                             conectado = false;
                             break;
                         case SEND_MSG:

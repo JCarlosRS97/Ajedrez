@@ -1,6 +1,5 @@
-quitar lo de host y port de player
 historial partidas
 reloj(opcional)
-feedback recepción
 imagen usuario
 revancha
+mirar el buffer de la pagina web si es necesario

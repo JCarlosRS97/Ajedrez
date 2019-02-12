@@ -194,7 +194,6 @@ public class BaseGUI {
     public void setChatMsg(String str){
         try {
             doc.insertBeforeEnd(doc.getElement(doc.getDefaultRootElement(), StyleConstants.NameAttribute, HTML.Tag.P), str);
-            System.out.println(txtPane.getText());
         } catch (IOException| BadLocationException e) {
             e.printStackTrace();
         }

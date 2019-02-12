@@ -2,10 +2,12 @@ package PWeb;
 
 import GUI.ServidorPWeb.GUIPWeb;
 import Logica.Comandos;
+import Utils.RecursosWeb;
 import Utils.SocketUtils;
 import Utils.WebUtils;
 import Utils.NetworkClient;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -29,8 +31,13 @@ public class UserRegister extends NetworkClient {
     @Override
     protected void handleConnection(Socket client) throws IOException {
         PrintWriter out = SocketUtils.getWriter(client);
+        BufferedReader in = SocketUtils.getReader(client);
         out.println(Comandos.NEW_USER + " " + user + " " + password);
-        WebUtils.printConfirmPage(pageWriter, serverName);
-        guipWeb.appendln("Se ha enviado el usuario correctamente.");
+        String line = in.readLine();
+        guipWeb.appendln(Thread.currentThread().getName() + " -> " + line);
+        if(line.contains("ACK"))
+            WebUtils.printConfirmPage(pageWriter, serverName);
+        else
+            WebUtils.printPage(pageWriter, serverName, RecursosWeb.getLoginWeb("El usuario ya existe", 255, 0, 0));
     }
 }

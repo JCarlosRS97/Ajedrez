@@ -29,7 +29,7 @@ public class UserData {
             return null;
         }
         if(params[0].equals(password))
-            return new Player(user, null, 0, null, Integer.valueOf(params[1]));
+            return new Player(user, null, Integer.valueOf(params[1]));
         else
             return null;
     }
@@ -47,34 +47,37 @@ public class UserData {
         }
     }
 
-    public static void saveNewUser(String user, String password) throws FileNotFoundException {
+    public static boolean saveNewUser(String user, String password) throws FileNotFoundException {
+        String[] ficheros = dir.list();
+        if(Arrays.binarySearch(ficheros, user) >= 0)
+            return false;
         PrintWriter writer = new PrintWriter(dir.getPath() + "/" + user);
         writer.println(password + " 1500");
         writer.close();
+        return true;
     }
 
-    private void display(){
-        String[] children = dir.list();
+    private static void display(){
+        String[] ficheros = dir.list();
 
-        if (children == null) {
+        if (ficheros == null) {
             System.out.println( "Either dir does not exist or is not a directory");
         } else {
-            Arrays.stream(children).forEach(System.out::println);
+            Arrays.stream(ficheros).forEach(System.out::println);
         }
     }
 
     public static void main(String[] args) {
-        UserData userData = new UserData();
         try {
-            userData.saveUser(new Player("ppe", null, 0, null, 1000));
-            userData.saveUser(new Player("alfonso", null, 0, null, 1003));
-            userData.saveUser(new Player("isabel", null, 0, null, 1003));
-            userData.saveUser(new Player("leonardo", null, 0, null, 1003));
-            userData.saveUser(new Player("curro", null, 0, null, 1003));
+            UserData.saveUser(new Player("ppe", null, 1000));
+            UserData.saveUser(new Player("alfonso", null, 1003));
+            UserData.saveUser(new Player("isabel", null, 1003));
+            UserData.saveUser(new Player("leonardo", null, 1003));
+            UserData.saveUser(new Player("curro", null, 1003));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        userData.display();
+        UserData.display();
     }
 
 }
