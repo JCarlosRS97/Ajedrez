@@ -6,7 +6,7 @@
 </head>
 <body bgcolor="#fdf5e6">
 <h1 align="center">Nuevo Registro</h1>
-<form autocomplete="off" action="login" method="post">
+<form enctype="multipart/form-data" autocomplete="off" action="login" method="post">
     <table align="center">
         <tr>
             <td>Usuario</td>
@@ -15,6 +15,10 @@
         <tr>
             <td>Contraseña</td>
             <td><input type="password" name="password" /></td>
+        </tr>
+        <tr>
+            <td>Fichero</td>
+            <td><input type="file" name="fichero" /></td>
         </tr>
         <tr>
             <td><input type="submit" /></td>
