@@ -18,14 +18,17 @@ public class UserRegister extends NetworkClient {
     private String serverName;
     private PrintWriter pageWriter;
     private GUIPWeb guipWeb;
+    private ServerPWeb serverPWeb; //Es necesario guaradar la referencia para leer la imagen solo
+                                    //Si la conexion ha sido aceptada.
 
-    public UserRegister(String serverName, PrintWriter pageWriter, String user, String password, GUIPWeb guipWeb) {
+    public UserRegister(String serverName, PrintWriter pageWriter, String user, String password, GUIPWeb guipWeb, ServerPWeb serverPWeb) {
         super("127.0.0.1", 9000);
         this.user = user;
         this.password = password;
         this.serverName = serverName;
         this.pageWriter = pageWriter;
         this.guipWeb = guipWeb;
+        this.serverPWeb = serverPWeb;
     }
 
     @Override
@@ -35,9 +38,11 @@ public class UserRegister extends NetworkClient {
         out.println(Comandos.NEW_USER + " " + user + " " + password);
         String line = in.readLine();
         guipWeb.appendln(Thread.currentThread().getName() + " -> " + line);
-        if(line.contains("ACK"))
+        if(line.contains("ACK")) {
+            serverPWeb.saveImageIfExist(user);
             WebUtils.printConfirmPage(pageWriter, serverName);
-        else
+        }else {
             WebUtils.printPage(pageWriter, serverName, RecursosWeb.getLoginWeb("El usuario ya existe", 255, 0, 0));
+        }
     }
 }

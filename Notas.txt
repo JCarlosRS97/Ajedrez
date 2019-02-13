@@ -3,3 +3,6 @@ reloj(opcional)
 imagen usuario
 revancha
 mirar el buffer de la pagina web si es necesario
+
+ImageNetManager imageNetManager = new ImageNetManager(host, 9001, baseGUI.getUser());
+                            imageNetManager.connect();

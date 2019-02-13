@@ -1,12 +1,11 @@
 package GUI.Cliente;
 
 import Utils.RecursosCliente;
+import cliente.ImageNetManager;
 
 import javax.swing.*;
 import javax.swing.text.BadLocationException;
-import javax.swing.text.Document;
 import javax.swing.text.StyleConstants;
-import javax.swing.text.StyledDocument;
 import javax.swing.text.html.HTML;
 import javax.swing.text.html.HTMLDocument;
 import java.awt.*;
@@ -50,8 +49,6 @@ public class BaseGUI {
         model = new DefaultListModel<>();
         list.setModel(model);
         dialogs = new ConcurrentLinkedQueue<>();
-        lblBlancas.setIcon(new ImageIcon(RecursosCliente.getSpriteUser()));
-        lblNegras.setIcon(new ImageIcon(RecursosCliente.getSpriteUser()));
         noTienesCuentaClickButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -176,11 +173,17 @@ public class BaseGUI {
 
     public void setTxtUsers(boolean blancas, String oponente){
         this.oponente = oponente;
+        ImageNetManager imageNetManager = new ImageNetManager("127.0.0.1", 9001, oponente, false);
+        imageNetManager.connect();
         if(blancas){
+            lblBlancas.setIcon(new ImageIcon(RecursosCliente.getSpriteUser()));
             lblBlancas.setText(user);
+            lblNegras.setIcon(new ImageIcon(RecursosCliente.getSpriteOpponent()));
             lblNegras.setText(oponente);
         }else {
+            lblBlancas.setIcon(new ImageIcon(RecursosCliente.getSpriteOpponent()));
             lblBlancas.setText(oponente);
+            lblNegras.setIcon(new ImageIcon(RecursosCliente.getSpriteUser()));
             lblNegras.setText(user);
         }
     }
@@ -204,4 +207,11 @@ public class BaseGUI {
     public void setInfoTxt(String puntuacion) {
         infoPlayer.setText("<html><body>Jugador: " + user + "<br>Puntuacion: " + puntuacion + "</body></html>");
     }
+
+    public void setPlayersIcons(){
+        ImageNetManager imageNetManager = new ImageNetManager("127.0.0.1", 9001, user, true);
+        imageNetManager.connect();
+    }
+
+
 }

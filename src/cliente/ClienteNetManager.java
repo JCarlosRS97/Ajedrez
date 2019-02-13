@@ -20,6 +20,7 @@ public class ClienteNetManager extends NetworkClient implements Runnable {
     private BaseGUI baseGUI;
     private Controlador controlador;
     private boolean conectado = true;
+    private String host;
 
     public ClienteNetManager(String host, int port, PanelCliente panelCliente, BaseGUI baseGUI, Controlador controlador) {
         super(host, port);
@@ -27,6 +28,7 @@ public class ClienteNetManager extends NetworkClient implements Runnable {
         this.tablero = panelCliente.getTablero();
         this.controlador = controlador;
         this.baseGUI = baseGUI;
+        this.host = host;
     }
 
     @Override
@@ -69,6 +71,9 @@ public class ClienteNetManager extends NetworkClient implements Runnable {
                             baseGUI.setEnableTxtPassword(true);
                         }else{
                             //Si el cliente se conecta de forma correcta
+                            //Se obtiene la imagen del usuario
+                            ImageNetManager imageNetManager = new ImageNetManager(host, 9001, baseGUI.getUser(), true);
+                            imageNetManager.connect();
                             baseGUI.changePanel(BaseGUI.HOME);
                             baseGUI.setTextErrorVisible(false);
                             baseGUI.setEnableBtnRetar(true);

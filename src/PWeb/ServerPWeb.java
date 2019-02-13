@@ -30,7 +30,6 @@ public class ServerPWeb extends MultiThreadServer {
     public void handleConnection(Socket connection) throws IOException {
         stream = new BufferedInputStream(connection.getInputStream());
         PrintWriter out = SocketUtils.getWriter(connection);
-        BufferedReader in = SocketUtils.getReader(connection);
         String name = "Registro";
         List<String> inputLines = new ArrayList<>();
         String line;
@@ -48,9 +47,8 @@ public class ServerPWeb extends MultiThreadServer {
                         String user;
                         do{
                             s = readln();
-                            System.out.println(s);
                         }while(s != null && !s.contains("user"));
-                        System.out.println(readln()); //Linea en blanco
+                        readln(); //Linea en blanco
                         s = readln();
                         if(s!= null && s.isEmpty()){
                             user = null;
@@ -59,17 +57,15 @@ public class ServerPWeb extends MultiThreadServer {
                         }
                         do{
                             s = readln();
-                            System.out.println(s);
                         }while(s != null && !s.contains("password"));
                         //Se lee el espacio en blanco
-                        System.out.println(readln());
+                        readln();
                         s = readln();
                         if(s!= null && s.isEmpty()){
                             password = null;
                         }else {
                             password = s;
                         }
-                        //String prueba[] = postData.split("(user=|password=|&)"); No merece la pena siguen siendo 4 elementos en el array
                         if(user ==null || password == null){
                             //Quedan campos por rellenar
                             WebUtils.printPage(out, name, RecursosWeb.getLoginWeb(
@@ -79,11 +75,11 @@ public class ServerPWeb extends MultiThreadServer {
                             WebUtils.printPage(out, name, RecursosWeb.getLoginWeb(
                                     "Solo se puede usar caracteres alfanumericos.", 255, 0, 0));
                         }else {
-                            saveImageIfExist(user);
+                            //saveImageIfExist(user);
                             guipWeb.appendln("Nuevo registro capturado.");
                             guipWeb.appendln("User: " + user);
                             guipWeb.appendln("Password: " + password);
-                            UserRegister userRegister = new UserRegister(name, out, user, password, guipWeb);
+                            UserRegister userRegister = new UserRegister(name, out, user, password, guipWeb, this);
                             userRegister.connect();
                         }
                     }else{
@@ -97,13 +93,13 @@ public class ServerPWeb extends MultiThreadServer {
             //Este error surge se cancela el navegador a mitad de carga
             guipWeb.appendln("Ha surgido un fallo en la conexion.");
         }
+        guipWeb.appendln("Ha finalizado la conexion.");
     }
 
-    private void saveImageIfExist(String user) throws IOException {
+    public void saveImageIfExist(String user) throws IOException {
         String s;
         do{
             s = readln();
-            System.out.println(s);
         }while(s != null && !s.contains("/png") && !s.contains("/octet-stream"));
         //Se comprueba si hay imagen
         if(s== null || s.contains("/octet-stream")){
@@ -112,11 +108,16 @@ public class ServerPWeb extends MultiThreadServer {
         }
         byte[] data = new byte[8000];    // with no CR at end.
         int chars = 1;      // Ignore multi-line posts, such as file uploads.
-        String postData;
-        System.out.println(readln());
+        readln();
         boolean fin = false;
-        BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(
-                dir.getName() + File.separator + user + ".png"));
+        BufferedOutputStream out;
+        try {
+            out = new BufferedOutputStream(new FileOutputStream(
+                    dir.getName() + File.separator + user + ".png"));
+        }catch (IOException e){
+            guipWeb.appendln("No se puede guardar la imagen.");
+            return;
+        }
         char fina[] = new char[4];
         fina[0] = 0;
         fina[1] = 0;
@@ -137,15 +138,18 @@ public class ServerPWeb extends MultiThreadServer {
                     i++;
                 }
             }
-            out.write(data, 0, (i+4)>data.length? data.length : i+4);
-            postData = new String(data, 0, chars);
-            System.out.println(postData);
+            try {
+                out.write(data, 0, (i+4)>data.length? data.length : i+4);
+            }catch (IOException e){
+                guipWeb.appendln("No se puede guardar la imagen.");
+                out.close();
+                return;
+            }
             if(fin){
-                postData = new String(data, i+4, chars-i-4);
-                System.out.println(postData);
                 break;
             }
         }
+        guipWeb.appendln("Se ha cargado correctamente la imagen.");
         out.close();
 
     }
