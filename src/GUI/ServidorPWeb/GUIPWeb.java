@@ -18,7 +18,7 @@ public class GUIPWeb {
         return panel;
     }
 
-    public void appendln(String s){
+    public synchronized void appendln(String s){
         textArea1.append(s + '\n');
         scroll.getVerticalScrollBar().setValue(scroll.getVerticalScrollBar().getMaximum());
     }

@@ -41,9 +41,7 @@ public class Controlador implements ActionListener, MouseListener {
                 connection.start();
             }
         }else if(e.getActionCommand().equalsIgnoreCase("RETAR")){
-            String s = baseGUI.getSelectedItem();
-            if(s != null)
-                out.println(Comandos.MATCH + " " + baseGUI.getSelectedItem());
+            matchAction();
         } else if(e.getActionCommand().equalsIgnoreCase("ABANDONAR")){
             out.println(Comandos.GIVE_UP);
             panelCliente.setEnableBtnAbandonar(false);
@@ -106,6 +104,12 @@ public class Controlador implements ActionListener, MouseListener {
 
     public void sendln(String s){
         out.println(s);
+    }
+
+    public void matchAction(){
+        String s = baseGUI.getSelectedItem();
+        if(s != null)
+            out.println(Comandos.MATCH + " " + baseGUI.getSelectedItem());
     }
 
 }

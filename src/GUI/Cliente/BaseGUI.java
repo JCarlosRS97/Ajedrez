@@ -9,10 +9,7 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.html.HTML;
 import javax.swing.text.html.HTMLDocument;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -79,6 +76,15 @@ public class BaseGUI {
                     btnSend.doClick();
             }
         });
+        list.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                if(e.getClickCount()==2)
+                    controlador.matchAction();
+            }
+        });
+
         s = scroll.getVerticalScrollBar();
         doc = (HTMLDocument) txtPane.getDocument();
     }

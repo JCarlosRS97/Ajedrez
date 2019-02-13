@@ -9,7 +9,6 @@ import java.util.stream.Collectors;
 
 public class PlayersManager {
     private ReentrantLock lock;
-    private int numJugadores = 0;
     private Set<Player> players;
     private ArrayList<Partida> partidas;
     private GUIServidor guiServidor;
@@ -21,18 +20,11 @@ public class PlayersManager {
         partidas = new ArrayList<>();
     }
 
-    public int getNumJugadores() { // proteje el numero de jugadores
-        int a;
-        lock.lock();
-        a = numJugadores;
-        lock.unlock();        
-        return a;
-    }
-
     public void initializeMatch(Partida partida) {
         //TODO comprobar si es necesaria el control de concurrencia
         lock.lock();
         partidas.add(partida);
+        lock.unlock();
         Player p1 = partida.getPlayer(0);
         Player p2 = partida.getPlayer(1);
         // Se escoge color
@@ -48,7 +40,6 @@ public class PlayersManager {
         p2.sendln(Comandos.SET_COLOR + " " + (p2.isBlancas()? "BLANCAS":"NEGRAS") + " " + p1.getUser() + " " +  p1.getPuntuacion());
 
         guiServidor.appendText("Comienza la partida " + (partidas.size()-1) + '\n');
-        lock.unlock();
     }
 
     public boolean addPlayer(Player player) {

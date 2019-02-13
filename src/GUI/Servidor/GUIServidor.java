@@ -19,7 +19,7 @@ public class GUIServidor {
         return panel1;
     }
 
-    public void appendText(String s){
+    public synchronized void appendText(String s){
         textArea1.append(s);
         scroll.getVerticalScrollBar().setValue(scroll.getVerticalScrollBar().getMaximum());
     }
