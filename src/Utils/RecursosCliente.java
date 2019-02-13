@@ -27,11 +27,11 @@ public class RecursosCliente {
         return piezas.getSubimage(60*pieza.ordinal(), blancas? 60 : 0, 60 , 60);
     }
     public static Image getSpriteUser(){
-        return user.getScaledInstance(60, 85,  java.awt.Image.SCALE_SMOOTH);
+        return user.getScaledInstance(80, 85,  java.awt.Image.SCALE_SMOOTH);
     }
 
     public static Image getSpriteOpponent(){
-        return opponent.getScaledInstance(60, 85,  java.awt.Image.SCALE_SMOOTH);
+        return opponent.getScaledInstance(80, 85,  java.awt.Image.SCALE_SMOOTH);
     }
 
     public static void setUserImage(BufferedImage image){

@@ -19,8 +19,8 @@ public class ImageServerGUI {
         return panel;
     }
 
-    public void appendText(String s){
-        textArea1.append(s);
+    public void appendln(String s){
+        textArea1.append(s + '\n');
         scroll.getVerticalScrollBar().setValue(scroll.getVerticalScrollBar().getMaximum());
     }
 }

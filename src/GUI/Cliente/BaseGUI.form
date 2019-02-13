@@ -28,7 +28,9 @@
               <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="7" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
+              <horizontalTextPosition value="0"/>
               <text value="Label"/>
+              <verticalTextPosition value="3"/>
             </properties>
           </component>
           <vspacer id="bbcdb">
@@ -48,10 +50,14 @@
           </vspacer>
           <component id="aa709" class="javax.swing.JLabel" binding="lblBlancas">
             <constraints>
-              <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="7" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="7" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                <minimum-size width="120" height="-1"/>
+              </grid>
             </constraints>
             <properties>
+              <horizontalTextPosition value="0"/>
               <text value="Label"/>
+              <verticalTextPosition value="3"/>
             </properties>
           </component>
         </children>
@@ -195,7 +201,7 @@
               <text value="Enviar"/>
             </properties>
           </component>
-          <scrollpane id="4e55f">
+          <scrollpane id="4e55f" binding="scroll">
             <constraints>
               <grid row="6" column="0" row-span="1" col-span="3" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -237,7 +243,7 @@
               <grid row="1" column="7" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="Lista de retos:"/>
+              <text value="Jugadores para retar:"/>
             </properties>
           </component>
           <vspacer id="3d5a4">
@@ -250,7 +256,9 @@
               <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
+              <horizontalTextPosition value="0"/>
               <text value="label"/>
+              <verticalTextPosition value="3"/>
             </properties>
           </component>
         </children>

@@ -54,9 +54,12 @@ public class Controlador implements ActionListener, MouseListener {
             baseGUI.changePanel(BaseGUI.HOME);
         } else if(e.getActionCommand().equalsIgnoreCase("SEND")) {
             //hay que proteger los espacios con un caracter no imprimible
-            out.println(Comandos.SEND_MSG + " <b>" + user +
-                    ("</b>: " + baseGUI.getMsg()).replace(" ", Character.valueOf((char)29).toString()) + "<br>");
-            baseGUI.clearMsg();
+            String s = baseGUI.getMsg();
+            if(!s.isEmpty()) {
+                out.println(Comandos.SEND_MSG + " <b>" + user +
+                        ("</b>: " + baseGUI.getMsg()).replace(" ", Character.valueOf((char) 29).toString()) + "<br>");
+                baseGUI.clearMsg();
+            }
         } else {
             System.err.println("Evento no esperado " + e.getSource().toString());
         }

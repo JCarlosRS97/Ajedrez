@@ -34,12 +34,15 @@ public class BaseGUI {
     private JButton btnSend;
     private JLabel infoPlayer;
     private JEditorPane txtPane;
+    private JScrollPane scroll;
     private String user = null;
     private String oponente;
     private DefaultListModel<String> model;
     private ConcurrentLinkedQueue<RematchDialog> dialogs; //Acumula los dialogs de retos
     private Controlador controlador;
     private final HTMLDocument doc;
+    private final JScrollBar s;
+    private String puntuacionPlayer;
 
     public static final String HOME = "Home";
     public static final String PARTIDA = "Partida";
@@ -76,6 +79,7 @@ public class BaseGUI {
                     btnSend.doClick();
             }
         });
+        s = scroll.getVerticalScrollBar();
         doc = (HTMLDocument) txtPane.getDocument();
     }
 
@@ -171,20 +175,24 @@ public class BaseGUI {
         JOptionPane.showMessageDialog(panel, "Has perdido.", "Fin de partida", JOptionPane.INFORMATION_MESSAGE);
     }
 
-    public void setTxtUsers(boolean blancas, String oponente){
+    public void setTxtUsers(boolean blancas, String oponente, String puntuacionOponente){
         this.oponente = oponente;
         ImageNetManager imageNetManager = new ImageNetManager("127.0.0.1", 9001, oponente, false);
         imageNetManager.connect();
         if(blancas){
             lblBlancas.setIcon(new ImageIcon(RecursosCliente.getSpriteUser()));
-            lblBlancas.setText(user);
+            lblBlancas.setText("<html><body>Jugador: " + user + "<br>Puntuacion: " +
+                    puntuacionPlayer + "</body></html>");
             lblNegras.setIcon(new ImageIcon(RecursosCliente.getSpriteOpponent()));
-            lblNegras.setText(oponente);
+            lblNegras.setText("<html><body>Jugador: " + oponente + "<br>Puntuacion: " +
+                    puntuacionOponente + "</body></html>");
         }else {
             lblBlancas.setIcon(new ImageIcon(RecursosCliente.getSpriteOpponent()));
-            lblBlancas.setText(oponente);
+            lblBlancas.setText("<html><body>Jugador: " + oponente + "<br>Puntuacion: " +
+                    puntuacionOponente + "</body></html>");
             lblNegras.setIcon(new ImageIcon(RecursosCliente.getSpriteUser()));
-            lblNegras.setText(user);
+            lblNegras.setText("<html><body>Jugador: " + user + "<br>Puntuacion: " +
+                    puntuacionPlayer + "</body></html>");
         }
     }
 
@@ -197,6 +205,7 @@ public class BaseGUI {
     public void setChatMsg(String str){
         try {
             doc.insertBeforeEnd(doc.getElement(doc.getDefaultRootElement(), StyleConstants.NameAttribute, HTML.Tag.P), str);
+            s.setValue(s.getMaximum());
         } catch (IOException| BadLocationException e) {
             e.printStackTrace();
         }
@@ -205,13 +214,12 @@ public class BaseGUI {
     public void clearMsg(){ txtMsg.setText(""); }
 
     public void setInfoTxt(String puntuacion) {
+        //Se guarda la puntuacion para las partidas
+        puntuacionPlayer =puntuacion;
         infoPlayer.setText("<html><body>Jugador: " + user + "<br>Puntuacion: " + puntuacion + "</body></html>");
     }
 
-    public void setPlayersIcons(){
-        ImageNetManager imageNetManager = new ImageNetManager("127.0.0.1", 9001, user, true);
-        imageNetManager.connect();
+    public void setIconPlayer() {
+        infoPlayer.setIcon(new ImageIcon(RecursosCliente.getSpriteUser()));
     }
-
-
 }

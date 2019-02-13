@@ -41,6 +41,7 @@ public class ClienteNetManager extends NetworkClient implements Runnable {
         controlador.setWriterSocket(out);
         while(conectado){
             line = in.readLine();
+            System.out.println(line);
             if(line != null) {
                 params = line.split(" ");
                 switch (Comandos.valueOf(params[0])){
@@ -50,7 +51,7 @@ public class ClienteNetManager extends NetworkClient implements Runnable {
                         baseGUI.changePanel(BaseGUI.PARTIDA);
                         boolean isBlancas = params[1].equalsIgnoreCase("BLANCAS");
                         panelCliente.setColorAndWrite(isBlancas);
-                        baseGUI.setTxtUsers(isBlancas, params[2]);
+                        baseGUI.setTxtUsers(isBlancas, params[2], params[3]);
                         panelCliente.setEnableBtnAbandonar(true);
                         panelCliente.setEnableBtnVolver(false);
                         break;
@@ -74,6 +75,7 @@ public class ClienteNetManager extends NetworkClient implements Runnable {
                             //Se obtiene la imagen del usuario
                             ImageNetManager imageNetManager = new ImageNetManager(host, 9001, baseGUI.getUser(), true);
                             imageNetManager.connect();
+                            baseGUI.setIconPlayer();
                             baseGUI.changePanel(BaseGUI.HOME);
                             baseGUI.setTextErrorVisible(false);
                             baseGUI.setEnableBtnRetar(true);

@@ -20,13 +20,15 @@ public class ImageServerManager extends MultiThreadServer {
     @Override
     public void handleConnection(Socket client) throws IOException {
         BufferedReader in = SocketUtils.getReader(client);
-        BufferedOutputStream out = new BufferedOutputStream(client.getOutputStream());
         String user = in.readLine();
+        gui.appendln("Se solicita la imagen del usuario: " + user);
         File file = new File("Images" + File.separator + user + ".png");
         if(!file.isFile()){
             client.getOutputStream().close();
+            gui.appendln("No existe ninguna imagen.");
             return;
         }
+        gui.appendln("Se procede a enviar la imagen.");
         BufferedImage image = ImageIO.read(file);
         ImageIO.write(image, "png", client.getOutputStream());
     }
