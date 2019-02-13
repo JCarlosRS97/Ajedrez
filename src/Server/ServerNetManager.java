@@ -162,6 +162,10 @@ public class ServerNetManager extends MultiThreadServer {
                     oponente = partida.getOponente(player);
                     oponente.setPlaying(false);
                     oponente.setPartida(null);
+                    oponente.setPuntuacionUpdate(player.getPuntuacion(), 1.0);
+                    oponente.sendln(Comandos.ELO_UPDATE + " " + oponente.getPuntuacion());
+                    player.setPuntuacionUpdate(oponente.getPuntuacion(), 0.0);
+                    player.sendln(Comandos.ELO_UPDATE + " " + player.getPuntuacion());
                     playersManager.removerPartida(partida);
                     playersManager.sendlnBroadcast(Comandos.ADD_USERS + " " + oponente.getUser());
                 }

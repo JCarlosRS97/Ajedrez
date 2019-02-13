@@ -209,6 +209,11 @@ public class BaseGUI {
     public String getMsg(){ return txtMsg.getText(); }
 
     public void setChatMsg(String str){
+        int p = 0;
+        while (p + 40 < str.length()){
+            p += 40;
+
+        }
         try {
             doc.insertBeforeEnd(doc.getElement(doc.getDefaultRootElement(), StyleConstants.NameAttribute, HTML.Tag.P), str);
             s.setValue(s.getMaximum());

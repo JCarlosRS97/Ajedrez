@@ -207,6 +207,7 @@
             </constraints>
             <properties>
               <autoscrolls value="true"/>
+              <horizontalScrollBarPolicy value="31"/>
             </properties>
             <border type="none"/>
             <children>
