@@ -71,13 +71,9 @@ public class PlayersManager {
         players.stream().forEach(e -> e.sendln(s));
     }
 
-    public boolean sendlnToPlayer(String user, String msg){
+    public void sendlnToPlayer(String user, String msg){
         Optional<Player> search = players.stream().filter(e -> e.getUser().equalsIgnoreCase(user)).findAny();
-        if(search.isPresent()){
-            search.get().sendln(msg);
-            return true;
-        }
-        return false;
+        search.ifPresent(player -> player.sendln(msg));
     }
 
     public Player getPlayer(String user){

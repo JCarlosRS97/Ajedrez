@@ -1,11 +1,8 @@
 package GUI.ImageServer;
 
 import ImageServer.ImageServerManager;
-import Server.PlayersManager;
-import Server.ServerNetManager;
 
 import javax.swing.*;
-import java.io.File;
 
 public class ImageServerMain {
 

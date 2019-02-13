@@ -23,10 +23,6 @@ public class Player {
         this.puntuacion = puntuacion;
     }
 
-    public Player(String user, PrintWriter out){
-        this(user, out, 1500);
-    }
-
     public boolean isBlancas() {
         return isBlancas;
     }

@@ -1,7 +1,6 @@
 package Utils;
 
 import java.io.PrintWriter;
-import java.util.List;
 
 public class WebUtils {
 	public static void printConfirmPage(PrintWriter out, String serverName) {
@@ -29,10 +28,7 @@ public class WebUtils {
                         .append("\r\n").append(page).toString());
     }
 
-	public static boolean usingPost(List<String> inputLines) {
-		return (inputLines.get(0).toUpperCase().startsWith("POST"));
-	}
-	public static void printTrailer(PrintWriter out) {
-		out.println("</pre></body></html>\n");
+	public static boolean usingPost(String inputLines) {
+		return inputLines.toUpperCase().startsWith("POST");
 	}
 }

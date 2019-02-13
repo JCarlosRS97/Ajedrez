@@ -42,10 +42,6 @@ public class PanelCliente extends JPanel {
         label.setText("Color : " + (color? "blancas" : "negras"));
     }
 
-    public void setTextLabel(String s){
-        label.setText(s);
-    }
-
     public void controlador(Controlador controlador) {
         btnVolver.addActionListener(controlador);
         btnVolver.setActionCommand("VOLVER");

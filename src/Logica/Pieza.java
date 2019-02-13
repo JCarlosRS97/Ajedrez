@@ -12,10 +12,6 @@ public class Pieza {
         return blancas;
     }
 
-    public TipoPieza getTipo() {
-        return tipo;
-    }
-
     public Pieza(boolean blancas, TipoPieza tipoPieza){
         this.blancas = blancas;
         this.tipo = tipoPieza;

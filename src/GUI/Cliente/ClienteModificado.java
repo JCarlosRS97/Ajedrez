@@ -1,7 +1,6 @@
 package GUI.Cliente;
 
 import javax.swing.*;
-import java.io.File;
 
 public class ClienteModificado {
     public static void main(String[] args) {

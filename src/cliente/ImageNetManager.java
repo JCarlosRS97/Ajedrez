@@ -10,8 +10,8 @@ import java.io.*;
 import java.net.Socket;
 
 public class ImageNetManager extends NetworkClient {
-    String user;
-    boolean miUser;
+    private String user;
+    private boolean miUser;
     public ImageNetManager(String host, int port, String user, boolean miUser) {
         super(host, port);
         this.user = user;

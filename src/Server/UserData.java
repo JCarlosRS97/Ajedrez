@@ -17,7 +17,7 @@ public class UserData {
         if (ficheros == null){
             return null;
         }
-        int n = Arrays.binarySearch(ficheros, user);
+        int n = Arrays.binarySearch(ficheros, user, String::compareToIgnoreCase);
         String params[];
         if(n < 0)
             return null;
@@ -49,7 +49,7 @@ public class UserData {
 
     public static boolean saveNewUser(String user, String password) throws FileNotFoundException {
         String[] ficheros = dir.list();
-        if(Arrays.binarySearch(ficheros, user) >= 0)
+        if(ficheros == null || Arrays.binarySearch(ficheros, user) >= 0)
             return false;
         PrintWriter writer = new PrintWriter(dir.getPath() + "/" + user);
         writer.println(password + " 1500");

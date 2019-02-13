@@ -28,10 +28,6 @@ public class Tablero extends JPanel {
         turno = color;
     }
 
-    public boolean isBlancas() {
-        return color;
-    }
-
     @Override
     public void paint(Graphics g){
         super.paint(g);

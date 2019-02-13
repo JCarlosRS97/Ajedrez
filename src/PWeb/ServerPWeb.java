@@ -9,9 +9,6 @@ import Utils.WebUtils;
 import java.io.*;
 import java.net.Socket;
 import java.net.SocketException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class ServerPWeb extends MultiThreadServer {
     private GUIPWeb guipWeb;
@@ -31,17 +28,16 @@ public class ServerPWeb extends MultiThreadServer {
         stream = new BufferedInputStream(connection.getInputStream());
         PrintWriter out = SocketUtils.getWriter(connection);
         String name = "Registro";
-        List<String> inputLines = new ArrayList<>();
         String line;
 
         guipWeb.appendln("Se ha producido una nueva conexion.");
+        String firstLine = readln();
         try {
             //Se lee al usuario
             while ((line = readln()) != null) {
-                inputLines.add(line);
                 System.out.println(line);
                 if (line.isEmpty()) { // blank line
-                    if (WebUtils.usingPost(inputLines)) { // If POST, one more line to read,
+                    if (firstLine != null && WebUtils.usingPost(firstLine)) { // If POST, one more line to read,
                         String s;
                         String password;
                         String user;

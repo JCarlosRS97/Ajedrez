@@ -2,12 +2,13 @@ package ImageServer;
 
 import GUI.ImageServer.ImageServerGUI;
 import Utils.MultiThreadServer;
-import Utils.NetworkClient;
 import Utils.SocketUtils;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
 import java.net.Socket;
 
 public class ImageServerManager extends MultiThreadServer {
